@@ -1,0 +1,315 @@
+#!/usr/bin/env python3
+"""
+GNOME Quick Themer — Headless CLI & Engine Runner
+Fast, zero-dependency CLI interface for compiling and applying themes.
+"""
+
+import os
+import sys
+import json
+import argparse
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, PROJECT_ROOT)
+
+from engine import compiler, installer, presets
+
+
+def print_swatch(hex_color: str, label: str = "") -> str:
+    """Returns an ANSI truecolor block."""
+    try:
+        hex_clean = hex_color.lstrip("#")
+        r = int(hex_clean[0:2], 16)
+        g = int(hex_clean[2:4], 16)
+        b = int(hex_clean[4:6], 16)
+        return f"\033[48;2;{r};{g};{b}m  \033[0m {label}"
+    except Exception:
+        return f"[{hex_color}] {label}"
+
+
+def cmd_list(args):
+    all_presets = presets.load_presets()
+    print(f"\n\033[1;36m🎨 GNOME Quick Themer — {len(all_presets)} Paletas Disponibles\033[0m\n")
+    for name, cfg in sorted(all_presets.items()):
+        accent = cfg.get("accent_color", "#a7c080")
+        bg = cfg.get("window_bg", "#2d353b")
+        mode = cfg.get("color_scheme", "dark")
+        mode_icon = "🌙" if mode == "dark" else "☀️"
+        swatch_bg = print_swatch(bg)
+        swatch_acc = print_swatch(accent)
+        print(f"  {mode_icon} \033[1m{name:<22}\033[0m {swatch_bg} {swatch_acc}  ({mode})")
+    print("")
+
+
+def cmd_apply(args):
+    all_presets = presets.load_presets()
+    preset_name = args.preset
+
+    if preset_name not in all_presets:
+        matches = [k for k in all_presets if k.lower() == preset_name.lower()]
+        if matches:
+            preset_name = matches[0]
+        else:
+            print(f"❌ Error: El tema '{preset_name}' no existe en el catálogo.", file=sys.stderr)
+            sys.exit(1)
+
+    cfg = dict(all_presets[preset_name])
+
+    if args.wallpaper_style:
+        cfg["wallpaper_style"] = args.wallpaper_style
+    if args.window_radius is not None:
+        cfg["window_radius"] = args.window_radius
+    if args.button_radius is not None:
+        cfg["button_radius"] = args.button_radius
+    if args.border_width is not None:
+        cfg["border_width"] = args.border_width
+    if args.button_layout:
+        cfg["button_layout"] = args.button_layout
+
+    print(f"⚙️  Compilando tema: {preset_name}...")
+    res = compiler.compile_theme(cfg)
+    if not res.get("success"):
+        print(f"❌ Error al compilar tema: {res.get('error')}", file=sys.stderr)
+        for log in res.get("logs", []):
+            print(f"   {log}", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"✅ Compilado en {res.get('duration_ms', 0):.1f} ms.")
+
+    compiled_dir = res["output_dir"]
+    print("🚀 Aplicando al escritorio GNOME y servicios...")
+    apply_res = installer.install_and_apply_theme(
+        theme_name=cfg["theme_name"],
+        compiled_dir=compiled_dir,
+        config=cfg,
+        apply_gtk4=not args.no_gtk4,
+        apply_wallpaper=not args.no_wallpaper,
+        apply_firefox=not args.no_firefox,
+        apply_flatpak=not args.no_flatpak
+    )
+
+    if apply_res.get("success"):
+        print(f"🎉 ¡Tema '{preset_name}' aplicado con éxito!")
+        for log in apply_res.get("logs", []):
+            print(f"   • {log}")
+    else:
+        print(f"❌ Error al aplicar tema: {apply_res.get('error')}", file=sys.stderr)
+        sys.exit(1)
+
+
+def cmd_custom(args):
+    """Applies a custom JSON configuration."""
+    if args.json:
+        try:
+            cfg = json.loads(args.json)
+        except Exception as e:
+            print(f"❌ Error al parsear JSON: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        cfg = {
+            "theme_name": args.name or "Custom-Theme",
+            "color_scheme": args.scheme or "dark",
+            "accent_color": args.accent or "#a7c080",
+            "accent_fg": args.accent_fg or "#1a201c",
+            "accent_secondary": args.accent_secondary or "#83c092",
+            "window_bg": args.bg or "#2d353b",
+            "sidebar_bg": args.sidebar or "#272e33",
+            "surface_elevated": args.surface or "#343f44",
+            "headerbar_bg": args.headerbar or "#232a2e",
+            "text_primary": args.text or "#d3c6aa",
+            "text_muted": args.muted or "#859289",
+            "border_color": args.border or "#3d484d",
+            "border_active": args.border_active or "#475258",
+            "window_radius": args.window_radius if args.window_radius is not None else 12,
+            "button_radius": args.button_radius if args.button_radius is not None else 8,
+            "border_width": args.border_width if args.border_width is not None else 1,
+            "window_controls_style": args.controls or "traffic-hover",
+            "button_layout": args.layout or "right",
+            "wallpaper_style": args.wallpaper_style or "abstract_waves",
+        }
+
+    theme_name = cfg.get("theme_name", "Custom-Theme")
+    if args.save:
+        presets.save_custom_preset(theme_name, cfg)
+        print(f"💾 Preset personalizado '{theme_name}' guardado.")
+
+    res = compiler.compile_theme(cfg)
+    if not res.get("success"):
+        print(f"❌ Error al compilar: {res.get('error')}", file=sys.stderr)
+        sys.exit(1)
+
+    apply_res = installer.install_and_apply_theme(
+        theme_name=cfg["theme_name"],
+        compiled_dir=res["output_dir"],
+        config=cfg,
+        apply_gtk4=not args.no_gtk4,
+        apply_wallpaper=not args.no_wallpaper,
+        apply_firefox=not args.no_firefox,
+        apply_flatpak=not args.no_flatpak
+    )
+    if apply_res.get("success"):
+        print(f"🎉 ¡Tema personalizado '{theme_name}' aplicado con éxito!")
+    else:
+        print(f"❌ Error al aplicar: {apply_res.get('error')}", file=sys.stderr)
+        sys.exit(1)
+
+
+def cmd_delete(args):
+    """Deletes a custom user preset."""
+    name = args.preset
+    if presets.delete_custom_preset(name):
+        print(f"🗑️  Preset personalizado '{name}' eliminado con éxito.")
+    else:
+        print(f"❌ Error: No se encontró un preset personalizado llamado '{name}'.", file=sys.stderr)
+        print("   Nota: Las 26 paletas del sistema son de solo lectura y no se pueden eliminar.", file=sys.stderr)
+        sys.exit(1)
+
+
+def cmd_info(args):
+    """Displays detailed metrics and color palette breakdown for a preset."""
+    all_presets = presets.load_presets()
+    name = args.preset
+    if name not in all_presets:
+        matches = [k for k in all_presets if k.lower() == name.lower()]
+        if matches:
+            name = matches[0]
+        else:
+            print(f"❌ Error: Preset '{name}' no encontrado en el catálogo.", file=sys.stderr)
+            sys.exit(1)
+
+    cfg = all_presets[name]
+    is_custom = name in presets.get_user_presets()
+
+    if args.json:
+        print(json.dumps(cfg, indent=2))
+    else:
+        badge = "\033[1;33m[Personalizado]\033[0m" if is_custom else "\033[1;32m[Sistema]\033[0m"
+        print(f"\n\033[1;36m🎨 Preset: {name}\033[0m {badge}")
+        print(f"  • Esquema:          {cfg.get('color_scheme', 'dark')}")
+        print(f"  • Acento Primario:  {print_swatch(cfg.get('accent_color', '#a7c080'))} {cfg.get('accent_color', '#a7c080')}")
+        print(f"  • Texto s/ Acento:  {print_swatch(cfg.get('accent_fg', '#ffffff'))} {cfg.get('accent_fg', '#ffffff')}")
+        print(f"  • Fondo Ventana:    {print_swatch(cfg.get('window_bg', '#2d353b'))} {cfg.get('window_bg', '#2d353b')}")
+        print(f"  • Barra Lateral:    {print_swatch(cfg.get('sidebar_bg', '#272e33'))} {cfg.get('sidebar_bg', '#272e33')}")
+        print(f"  • Headerbar:        {print_swatch(cfg.get('headerbar_bg', '#232a2e'))} {cfg.get('headerbar_bg', '#232a2e')}")
+        print(f"  • Texto Principal:  {print_swatch(cfg.get('text_primary', '#d3c6aa'))} {cfg.get('text_primary', '#d3c6aa')}")
+        print(f"  • Borde Ventana:    {print_swatch(cfg.get('border_color', '#3d484d'))} {cfg.get('border_color', '#3d484d')}")
+        print(f"  • Radio Ventana:    {cfg.get('window_radius', 12)} px")
+        print(f"  • Radio Botones:    {cfg.get('button_radius', 8)} px")
+        print(f"  • Ancho de Borde:   {cfg.get('border_width', 1)} px")
+        print(f"  • Disposición:      {cfg.get('button_layout', 'right')}")
+        print(f"  • Estilo Controles: {cfg.get('window_controls_style', 'traffic-hover')}")
+        print(f"  • Fondo SVG:        {cfg.get('wallpaper_style', 'aurora')}\n")
+
+
+def cmd_reset(args):
+    print("🔄 Restableciendo entorno GNOME a valores por defecto...")
+    res = installer.reset_gnome_defaults()
+    if res.get("success"):
+        print("✅ Entorno restablecido a Adwaita.")
+        for log in res.get("logs", []):
+            print(f"   • {log}")
+    else:
+        print(f"❌ Error al restablecer: {res.get('error')}", file=sys.stderr)
+        sys.exit(1)
+
+
+def cmd_status(args):
+    status = installer.get_current_theme_status()
+    if args.json:
+        print(json.dumps(status, indent=2))
+    else:
+        print("\n\033[1;36m📊 Estado Actual del Entorno GNOME\033[0m")
+        print(f"  • Tema GTK:          {status.get('gtk_theme')}")
+        print(f"  • Tema Shell:        {status.get('shell_theme')}")
+        print(f"  • Color Scheme:      {status.get('color_scheme')}")
+        print(f"  • Acento GNOME:      {status.get('accent_color')}")
+        print(f"  • User Themes Ext:   {status.get('user_theme_extension')}")
+        print(f"  • GTK 4 Override:    {status.get('gtk4_config_active')}\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="GNOME Quick Themer Headless CLI")
+    subparsers = parser.add_subparsers(dest="command", help="Comandos disponibles")
+
+    # list
+    subparsers.add_parser("list", help="Lista todas las paletas calibradas")
+
+    # apply
+    p_apply = subparsers.add_parser("apply", help="Compila y aplica un tema")
+    p_apply.add_argument("preset", help="Nombre del preset (ej: 'Catppuccin Mocha')")
+    p_apply.add_argument("--no-wallpaper", action="store_true", help="No generar wallpaper")
+    p_apply.add_argument("--no-firefox", action="store_true", help="No personalizar Firefox")
+    p_apply.add_argument("--no-flatpak", action="store_true", help="No propagar a Flatpaks")
+    p_apply.add_argument("--no-gtk4", action="store_true", help="No sobreescribir gtk-4.0")
+    p_apply.add_argument("--wallpaper-style", choices=["abstract_waves", "aurora", "geometric"], help="Estilo de wallpaper")
+    p_apply.add_argument("--window-radius", type=int, help="Radio de ventana en px")
+    p_apply.add_argument("--button-radius", type=int, help="Radio de botones en px")
+    p_apply.add_argument("--border-width", type=int, help="Grosor de borde en px (0 a 4)")
+    p_apply.add_argument("--button-layout", choices=["right", "left", "right-compact", "left-compact"], help="Disposición de botones de ventana")
+
+    # custom
+    p_custom = subparsers.add_parser("custom", help="Compila y aplica una configuración personalizada")
+    p_custom.add_argument("--json", help="JSON completo con los parámetros de la paleta")
+    p_custom.add_argument("--name", help="Nombre del tema")
+    p_custom.add_argument("--scheme", choices=["dark", "light"], help="Esquema de color")
+    p_custom.add_argument("--accent", help="Color de acento hex (ej: #a7c080)")
+    p_custom.add_argument("--accent-fg", help="Color del texto sobre el acento")
+    p_custom.add_argument("--accent-secondary", help="Color secundario de acento")
+    p_custom.add_argument("--bg", help="Color de fondo de ventana hex")
+    p_custom.add_argument("--sidebar", help="Color de sidebar hex")
+    p_custom.add_argument("--headerbar", help="Color de headerbar hex")
+    p_custom.add_argument("--surface", help="Color de superficie elevada")
+    p_custom.add_argument("--text", help="Color de texto principal")
+    p_custom.add_argument("--muted", help="Color de texto secundario")
+    p_custom.add_argument("--border", help="Color de borde")
+    p_custom.add_argument("--border-active", help="Color de borde activo")
+    p_custom.add_argument("--window-radius", type=int, help="Radio de ventana en px")
+    p_custom.add_argument("--button-radius", type=int, help="Radio de botones en px")
+    p_custom.add_argument("--border-width", type=int, help="Grosor de borde en px")
+    p_custom.add_argument("--controls", choices=["traffic-hover", "adwaita"], help="Estilo de controles")
+    p_custom.add_argument("--layout", choices=["right", "left", "right-compact", "left-compact"], help="Ubicación de controles")
+    p_custom.add_argument("--wallpaper-style", choices=["abstract_waves", "aurora", "geometric"], help="Estilo de wallpaper")
+    p_custom.add_argument("--save", action="store_true", help="Guardar como preset de usuario")
+    p_custom.add_argument("--no-wallpaper", action="store_true", help="No generar wallpaper")
+    p_custom.add_argument("--no-firefox", action="store_true", help="No personalizar Firefox")
+    p_custom.add_argument("--no-flatpak", action="store_true", help="No propagar a Flatpaks")
+    p_custom.add_argument("--no-gtk4", action="store_true", help="No sobreescribir gtk-4.0")
+
+    # info
+    p_info = subparsers.add_parser("info", help="Muestra los detalles y paleta de un preset")
+    p_info.add_argument("preset", help="Nombre del preset")
+    p_info.add_argument("--json", action="store_true", help="Salida en formato JSON")
+
+    # delete
+    p_delete = subparsers.add_parser("delete", help="Elimina un preset personalizado del usuario")
+    p_delete.add_argument("preset", help="Nombre del preset personalizado a eliminar")
+
+    # reset
+    subparsers.add_parser("reset", help="Restablece el entorno a valores por defecto")
+
+    # status
+    p_status = subparsers.add_parser("status", help="Muestra el estado del entorno")
+    p_status.add_argument("--json", action="store_true", help="Salida en formato JSON")
+
+    args = parser.parse_args()
+
+    if args.command == "list":
+        cmd_list(args)
+    elif args.command == "apply":
+        cmd_apply(args)
+    elif args.command == "custom":
+        cmd_custom(args)
+    elif args.command == "info":
+        cmd_info(args)
+    elif args.command == "delete":
+        cmd_delete(args)
+    elif args.command == "reset":
+        cmd_reset(args)
+    elif args.command == "status":
+        cmd_status(args)
+    else:
+        parser.print_help()
+
+
+if __name__ == "__main__":
+    main()

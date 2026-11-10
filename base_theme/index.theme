@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Everforest-Dark
+Comment=Comfortable & natural Everforest dark theme for GTK and GNOME Shell 51
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Everforest-Dark
+MetacityTheme=Adwaita
+IconTheme=Adwaita
+CursorTheme=Adwaita

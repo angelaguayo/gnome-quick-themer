@@ -1,0 +1,555 @@
+/* ===================================================================
+ * EVERFOREST GTK 3 THEME - MODO OSCURO
+ * ===================================================================
+ * Basado 100% en la estructura, márgenes y geometría de Adwaita-dark.
+ *
+ * PALETA DE COLORES EVERFOREST DARK (Guía Oficial):
+ * 1.  Everforest Dark  (#2d353b) -> Fondo principal de la ventana
+ * 2.  Forest Green     (#a7c080) -> Acento primario, selección, switches
+ * 3.  Aqua/Sage        (#83c092) -> Acento secundario teal, hover activo
+ * 4.  Muted Yellow     (#dbbc7f) -> Advertencias, favoritos y avisos
+ * 5.  Terracotta       (#e69875) -> Naranja, avisos especiales, badges
+ * 6.  Slate Blue       (#7fbbb3) -> Información, enlaces (links) y badges
+ * 7.  Warm Red         (#e67e80) -> Destructivo, error y botón cerrar
+ * 8.  Lavender         (#d699b6) -> Púrpura, enlaces visitados y tags
+ * 9.  Tonos crema      (#d3c63b) -> Resaltados de búsqueda y chips dorados
+ * 10. Texto crema      (#d3c6aa) -> Texto principal y primer plano
+ * 11. Gris apagado     (#859289) -> Texto secundario, subtítulos y atajos
+ * =================================================================== */
+
+@import "../scss/variables";
+@import "../scss/metrics";
+
+@import url($gtk3-contained-theme);
+
+/* ===================================================================
+ * SECCIÓN 1: PALETA BASE DINÁMICA
+ * =================================================================== */
+@define-color ef_bg_dim         #{$headerbar-bg};
+@define-color ef_bg0            #{$window-bg};
+@define-color ef_bg1            #{$sidebar-bg};
+@define-color ef_bg2            #{$surface-elevated};
+@define-color ef_bg3            #{$border-color};
+@define-color ef_bg4            #{$border-active};
+@define-color ef_bg5            #{$border-active};
+
+@define-color ef_fg             #{$text-primary};
+@define-color ef_fg_muted       #{$text-muted};
+@define-color ef_gray_muted     #{$text-muted};
+@define-color ef_fg_subtle      #{$text-muted};
+
+@define-color ef_green          #{$accent-color};
+@define-color ef_aqua           #{$accent-secondary};
+@define-color ef_yellow         #{$warning-color};
+@define-color ef_orange         #{$orange-color};
+@define-color ef_terracotta     #{$orange-color};
+@define-color ef_blue           #{$info-color};
+@define-color ef_red            #{$destructive-color};
+@define-color ef_purple         #{$purple-color};
+@define-color ef_lavender       #{$purple-color};
+@define-color ef_cream          #dbbc7f;
+@define-color ef_cream_bg       #f6efd5;
+
+/* ===================================================================
+ * SECCIÓN 2: ASIGNACIÓN DE COLORES A ELEMENTOS GTK 3
+ * =================================================================== */
+
+@define-color theme_bg_color            #{"@ef_bg0"};     /* Fondo de ventana (Everforest Dark) */
+@define-color theme_fg_color            #{"@ef_fg"};      /* Texto de ventana (Texto crema) */
+@define-color theme_base_color          #{"@ef_bg1"};     /* Fondo de cajas de texto y listas */
+@define-color theme_text_color          #{"@ef_fg"};      /* Texto en cajas de texto */
+@define-color theme_selected_bg_color   #{"@ef_green"};   /* Forest Green */
+@define-color theme_selected_fg_color   #{$accent-fg};    /* Texto de selección */
+
+@define-color insensitive_bg_color      #{"@ef_bg1"};     /* Fondo deshabilitado */
+@define-color insensitive_fg_color      #{"@ef_fg_subtle"}; /* Texto deshabilitado */
+@define-color insensitive_base_color    #{"@ef_bg1"};
+
+@define-color theme_unfocused_bg_color          #{"@ef_bg0"};
+@define-color theme_unfocused_fg_color          #{"@ef_fg_muted"}; /* Gris apagado */
+@define-color theme_unfocused_base_color        #{"@ef_bg1"};
+@define-color theme_unfocused_selected_bg_color #{"@ef_bg3"};
+@define-color theme_unfocused_selected_fg_color #{"@ef_fg"};
+
+@define-color borders                   #{"@ef_bg3"};     /* Bordes generales */
+@define-color unfocused_borders         #{"@ef_bg2"};     /* Bordes inactivos */
+
+@define-color warning_color             #{"@ef_yellow"};  /* Muted Yellow */
+@define-color error_color               #{"@ef_red"};     /* Warm Red */
+@define-color success_color             #{"@ef_aqua"};    /* Aqua/Sage */
+@define-color info_color                #{"@ef_blue"};    /* Slate Blue */
+@define-color destructive_color         #{"@ef_red"};     /* Warm Red */
+@define-color link_color                #{"@ef_blue"};    /* Slate Blue */
+@define-color link_visited_color        #{"@ef_purple"};  /* Lavender */
+
+@define-color content_view_bg           #{"@ef_bg1"};
+@define-color tooltip_bg_color          #{"@ef_bg_dim"};
+@define-color tooltip_fg_color          #{"@ef_fg"};
+
+/* ===================================================================
+ * SECCIÓN 3: COMPORTAMIENTO INTERNO DE WIDGETS GTK 3
+ * =================================================================== */
+
+/* Ventanas y Vistas */
+window, .background {
+  background-color: #{"@theme_bg_color"};
+  color: #{"@theme_fg_color"};
+}
+
+.view, textview text {
+  background-color: #{"@theme_base_color"};
+  color: #{"@theme_text_color"};
+}
+
+.view:backdrop, textview text:backdrop {
+  background-color: #{"@theme_unfocused_base_color"};
+  color: #{"@theme_unfocused_fg_color"};
+}
+
+.view:selected, textview text:selected {
+  background-color: #{"@theme_selected_bg_color"};
+  color: #{"@theme_selected_fg_color"};
+}
+
+/* Barras de Título / Headerbar */
+headerbar, .titlebar {
+  background-color: #{"@ef_bg_dim"};
+  border-color: #{"@borders"};
+  color: #{"@theme_fg_color"};
+}
+
+headerbar:backdrop, .titlebar:backdrop {
+  background-color: #{"@ef_bg_dim"};
+  border-color: #{"@unfocused_borders"};
+  color: #{"@ef_fg_subtle"};
+}
+
+headerbar .title, .titlebar .title {
+  color: #{"@theme_fg_color"};
+}
+
+headerbar .subtitle, .titlebar .subtitle {
+  color: #{"@ef_fg_muted"}; /* Gris apagado */
+}
+
+/* Paneles laterales en GTK 3 (File choosers, editores, navegadores) */
+.sidebar,
+.navigation-sidebar,
+stacksidebar {
+  background-color: #{"@ef_bg1"};
+  color: #{"@theme_fg_color"};
+}
+
+.sidebar:backdrop,
+.navigation-sidebar:backdrop,
+stacksidebar:backdrop {
+  background-color: #{"@ef_bg_dim"};
+  color: #{"@theme_unfocused_fg_color"};
+}
+
+.sidebar row:hover,
+.navigation-sidebar row:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.sidebar row:selected,
+.navigation-sidebar row:selected,
+stacksidebar row:selected {
+  background-color: #{"@theme_selected_bg_color"};
+  color: #{"@theme_selected_fg_color"};
+}
+
+paned > separator {
+  background-color: #{"@borders"};
+  min-width: 1px;
+  min-height: 1px;
+}
+
+toolbar, .toolbar {
+  background-color: #{"@ef_bg_dim"};
+  color: #{"@theme_fg_color"};
+  border-color: #{"@borders"};
+}
+
+/* ===================================================================
+ * BOTONES DE VENTANA TIPO SEMÁFORO (GTK 3)
+ * ===================================================================
+ * Para cambiar el tamaño del círculo de hover:
+ * - Modifica 'min-width' / 'min-height' y 'padding' en 'button.titlebutton':
+ *   * min-width: 18px / padding: 2px -> Más pequeño y ajustado
+ *   * min-width: 20px / padding: 2.5px -> Tamaño intermedio refinado (Recomendado)
+ *   * min-width: 24px / padding: 4px -> Tamaño estándar más amplio
+ * =================================================================== */
+button.titlebutton {
+  color: #{"@theme_fg_color"};
+  border-radius: 9999px;
+  min-width: 20px;
+  min-height: 20px;
+  padding: 2.5px;
+  margin: 3px 2px;
+  transition: background-color 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+button.titlebutton:hover {
+  background-color: rgba(211, 198, 170, 0.15);
+  border-radius: 9999px;
+}
+
+button.titlebutton:active {
+  background-color: rgba(211, 198, 170, 0.25);
+  border-radius: 9999px;
+}
+
+button.titlebutton:backdrop {
+  color: #{"@ef_fg_subtle"};
+  opacity: 0.7;
+}
+
+button.titlebutton {
+  padding: 4px;
+  min-width: #{$window-controls-size}px;
+  min-height: #{$window-controls-size}px;
+}
+
+@if $window-controls-style == "macos" {
+  button.titlebutton.close, headerbar button.titlebutton.close {
+    background-color: #ff5f56;
+    color: rgba(0, 0, 0, 0.6);
+    border-radius: 9999px;
+  }
+  button.titlebutton.minimize, headerbar button.titlebutton.minimize {
+    background-color: #ffbd2e;
+    color: rgba(0, 0, 0, 0.6);
+    border-radius: 9999px;
+  }
+  button.titlebutton.maximize, headerbar button.titlebutton.maximize {
+    background-color: #27c93f;
+    color: rgba(0, 0, 0, 0.6);
+    border-radius: 9999px;
+  }
+  button.titlebutton.close:hover, headerbar button.titlebutton.close:hover {
+    background-color: #e0443e;
+  }
+  button.titlebutton.minimize:hover, headerbar button.titlebutton.minimize:hover {
+    background-color: #dea123;
+  }
+  button.titlebutton.maximize:hover, headerbar button.titlebutton.maximize:hover {
+    background-color: #1aab29;
+  }
+} @else if $window-controls-style == "accent" {
+  button.titlebutton.close, button.titlebutton.minimize, button.titlebutton.maximize,
+  headerbar button.titlebutton.close, headerbar button.titlebutton.minimize, headerbar button.titlebutton.maximize {
+    background-color: $accent-color;
+    color: $accent-fg;
+    border-radius: 9999px;
+  }
+  button.titlebutton.close:hover, headerbar button.titlebutton.close:hover {
+    background-color: $destructive-color;
+  }
+} @else if $window-controls-style == "monochrome" {
+  button.titlebutton.close, button.titlebutton.minimize, button.titlebutton.maximize,
+  headerbar button.titlebutton.close, headerbar button.titlebutton.minimize, headerbar button.titlebutton.maximize {
+    background-color: rgba($text-primary, 0.15);
+    color: $text-primary;
+    border-radius: 9999px;
+  }
+  button.titlebutton.close:hover, headerbar button.titlebutton.close:hover {
+    background-color: $destructive-color;
+    color: #ffffff;
+  }
+} @else {
+  /* Semáforo en Hover (Solo el círculo) */
+  button.titlebutton.close:hover,
+  headerbar button.titlebutton.close:hover {
+    background-color: #{"@ef_red"}; /* Warm Red #e67e80 */
+    color: #232a2e;
+    border-radius: 9999px;
+  }
+
+  button.titlebutton.minimize:hover,
+  headerbar button.titlebutton.minimize:hover {
+    background-color: #{"@ef_yellow"}; /* Muted Yellow #dbbc7f */
+    color: #232a2e;
+    border-radius: 9999px;
+  }
+
+  button.titlebutton.maximize:hover,
+  headerbar button.titlebutton.maximize:hover {
+    background-color: #{"@ef_green"}; /* Forest Green #a7c080 */
+    color: #232a2e;
+    border-radius: 9999px;
+  }
+}
+
+/* Semáforo en Active (Click) */
+button.titlebutton.close:active,
+headerbar button.titlebutton.close:active {
+  background-color: #cd6769;
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+button.titlebutton.minimize:active,
+headerbar button.titlebutton.minimize:active {
+  background-color: #c2a366;
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+button.titlebutton.maximize:active,
+headerbar button.titlebutton.maximize:active {
+  background-color: #8fa869;
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+/* Botones estándar */
+button {
+  background-color: #{"@ef_bg2"};
+  color: #{"@theme_fg_color"};
+  border-color: #{"@borders"};
+  background-image: none;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: #{"@ef_bg3"};
+  border-color: #{"@ef_bg4"};
+}
+
+button:active, button:checked {
+  background-color: #{"@theme_selected_bg_color"};
+  color: #{"@theme_selected_fg_color"};
+  border-color: #{"@theme_selected_bg_color"};
+}
+
+button:disabled {
+  background-color: #{"@ef_bg1"};
+  color: #{"@insensitive_fg_color"};
+  border-color: #{"@ef_bg2"};
+}
+
+button.flat {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+button.flat:hover {
+  background-color: rgba(211, 198, 170, 0.12);
+}
+
+button.suggested-action {
+  background-color: #{"@theme_selected_bg_color"}; /* Forest Green */
+  color: #{"@theme_selected_fg_color"};
+  border-color: #{"@theme_selected_bg_color"};
+}
+
+button.destructive-action {
+  background-color: #{"@destructive_color"}; /* Warm Red */
+  color: #232a2e;
+  border-color: #{"@destructive_color"};
+}
+
+/* Enlaces (Slate Blue & Lavender) */
+link, a, .link {
+  color: #{"@ef_blue"}; /* Slate Blue */
+}
+
+link:hover, a:hover, .link:hover {
+  color: #{"@ef_aqua"}; /* Aqua/Sage */
+}
+
+link:visited, a:visited, .link:visited {
+  color: #{"@ef_purple"}; /* Lavender */
+}
+
+/* Entradas de texto */
+entry {
+  background-color: #{"@theme_base_color"};
+  color: #{"@theme_text_color"};
+  border-color: #{"@borders"};
+}
+
+entry:focus {
+  border-color: #{"@theme_selected_bg_color"}; /* Forest Green */
+}
+
+/* Menús y Popovers */
+popover, .popover {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+popover > contents {
+  background-color: #{"@ef_bg0"};
+  color: #{"@theme_fg_color"};
+  border: 1px solid #{"@borders"};
+  border-radius: #{$popup-radius}px;
+  box-shadow: 0 4px 14px 2px rgba(0, 0, 0, 0.18);
+}
+
+menu, .menu {
+  background-color: #{"@ef_bg0"};
+  color: #{"@theme_fg_color"};
+  border-color: #{"@borders"};
+  border-radius: #{$popup-radius}px;
+}
+
+/* Listas y Filas */
+list, .list {
+  background-color: #{"@theme_base_color"};
+  color: #{"@theme_text_color"};
+}
+
+row:selected {
+  background-color: #{"@ef_bg3"};
+  color: #{"@theme_selected_bg_color"};
+}
+
+/* Switches & Toggles */
+switch:checked {
+  background-color: #{"@ef_green"}; /* Forest Green */
+  color: #232a2e;
+}
+
+/* Check & Radio */
+check:checked, radio:checked {
+  background-color: #{"@ef_green"};
+  color: #232a2e;
+  border-color: #{"@ef_green"};
+}
+
+/* Barras de progreso y niveles */
+progressbar progress {
+  background-color: #{"@ef_green"}; /* Forest Green */
+}
+
+levelbar block.filled {
+  background-color: #{"@ef_green"};
+}
+
+levelbar block.low {
+  background-color: #{"@ef_yellow"}; /* Muted Yellow */
+}
+
+levelbar block.high {
+  background-color: #{"@ef_green"};
+}
+
+levelbar block.full {
+  background-color: #{"@ef_aqua"}; /* Aqua/Sage */
+}
+
+levelbar block.empty {
+  background-color: #{"@ef_bg3"};
+}
+
+/* Sliders y escalas */
+scale highlight {
+  background-color: #{"@ef_green"};
+}
+
+scale slider:hover {
+  background-color: #{"@ef_aqua"}; /* Aqua/Sage */
+}
+
+/* Resaltado de búsqueda y texto (Tonos crema) */
+mark, .mark {
+  background-color: #{"@ef_cream"}; /* Tonos crema #d3c63b */
+  color: #232a2e;
+}
+
+/* Etiquetas secundarias (Gris apagado) */
+.dim-label, .subtitle, caption {
+  color: #{"@ef_fg_muted"}; /* Gris apagado #859289 */
+}
+
+/* Badges e insignias de colores Everforest */
+.badge {
+  background-color: #{"@ef_bg3"};
+  color: #{"@ef_fg"};
+}
+
+.badge.accent, .accent.badge {
+  background-color: #{"@ef_green"}; /* Forest Green */
+  color: #232a2e;
+}
+
+.badge.info, .info.badge {
+  background-color: #{"@ef_blue"}; /* Slate Blue */
+  color: #232a2e;
+}
+
+.badge.warning, .warning.badge {
+  background-color: #{"@ef_yellow"}; /* Muted Yellow */
+  color: #232a2e;
+}
+
+.badge.error, .error.badge {
+  background-color: #{"@ef_red"}; /* Warm Red */
+  color: #232a2e;
+}
+
+.badge.success, .success.badge {
+  background-color: #{"@ef_aqua"}; /* Aqua/Sage */
+  color: #232a2e;
+}
+
+.badge.terracotta, .badge.orange, .orange.badge, .numeric {
+  background-color: #{"@ef_orange"}; /* Terracotta */
+  color: #232a2e;
+}
+
+.badge.lavender, .badge.purple, .purple.badge {
+  background-color: #{"@ef_purple"}; /* Lavender */
+  color: #232a2e;
+}
+
+.badge.cream, .cream.badge {
+  background-color: #{"@ef_cream"}; /* Tonos crema */
+  color: #232a2e;
+}
+
+.badge.muted, .badge.gray, .gray.badge {
+  background-color: #{"@ef_gray_muted"}; /* Gris apagado */
+  color: #232a2e;
+}
+
+/* Barras de desplazamiento */
+scrollbar slider {
+  background-color: #{"@ef_bg4"};
+}
+
+scrollbar slider:hover {
+  background-color: #{"@theme_selected_bg_color"}; /* Forest Green */
+}
+
+scrollbar slider:active {
+  background-color: #{"@ef_aqua"}; /* Aqua/Sage */
+}
+
+/* ===================================================================
+ * SECCIÓN 5: GEOMETRÍA Y MÉTRICAS DINÁMICAS
+ * =================================================================== */
+window.background, window.csd, window.solid-csd, .window-frame, dialog {
+  border-radius: #{$window-radius}px;
+}
+
+window.maximized, window.fullscreen,
+window.maximized > .background, window.fullscreen > .background,
+window.maximized.csd, window.fullscreen.csd {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+button, .button, entry, .entry, dropdown > button {
+  border-radius: #{$button-radius}px;
+}
+
+button, entry, .card {
+  border-width: #{$border-width}px;
+}

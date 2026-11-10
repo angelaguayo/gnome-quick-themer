@@ -1,0 +1,60 @@
+/* ===================================================================
+ * GNOME THEME STUDIO - FIREFOX USERCONTENT.CSS
+ * Styles about:home, about:newtab, about:blank & Preferences
+ * =================================================================== */
+
+@import "../scss/variables";
+@import "../scss/metrics";
+
+@-moz-document url("about:newtab"), url("about:home"), url("about:blank") {
+  body, .activity-stream {
+    background-color: #{$window-bg} !important;
+    color: #{$text-primary} !important;
+  }
+
+  .search-wrapper .search-inner-wrapper {
+    background-color: #{$surface-elevated} !important;
+    border: 1px solid #{$border-color} !important;
+    border-radius: 12px !important;
+    color: #{$text-primary} !important;
+  }
+
+  .search-wrapper .search-inner-wrapper:hover,
+  .search-wrapper .search-inner-wrapper:focus-within {
+    border-color: #{$accent-color} !important;
+    box-shadow: 0 0 0 1.5px #{$accent-color} !important;
+  }
+
+  .top-site-button .tile {
+    background-color: #{$surface-elevated} !important;
+    border: 1px solid #{$border-color} !important;
+    border-radius: 12px !important;
+    transition: transform 150ms ease, border-color 150ms ease !important;
+  }
+
+  .top-site-button:hover .tile {
+    border-color: #{$border-active} !important;
+    transform: translateY(-2px);
+  }
+
+  .top-site-button .title {
+    color: #{$text-primary} !important;
+  }
+
+  .card-outer {
+    background-color: #{$surface-elevated} !important;
+    border: 1px solid #{$border-color} !important;
+    border-radius: 12px !important;
+  }
+}
+
+@-moz-document url-prefix("about:preferences"), url-prefix("about:addons") {
+  :root {
+    --in-content-page-background: #{$window-bg} !important;
+    --in-content-page-color: #{$text-primary} !important;
+    --in-content-box-background: #{$surface-elevated} !important;
+    --in-content-box-border-color: #{$border-color} !important;
+    --in-content-primary-button-background: #{$accent-color} !important;
+    --in-content-primary-button-text-color: #{$accent-fg} !important;
+  }
+}

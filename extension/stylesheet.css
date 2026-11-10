@@ -1,0 +1,35 @@
+/* GNOME Quick Themer — Extension Stylesheet */
+
+.quick-themer-scroll-section {
+    max-height: 380px;
+}
+
+.quick-themer-preset-item {
+    font-weight: 500;
+}
+
+.quick-themer-swatch-box {
+    spacing: 6px;
+    margin-right: 6px;
+    margin-left: 10px;
+}
+
+.quick-themer-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+}
+
+.quick-themer-header-btn {
+    padding: 6px;
+    border-radius: 9999px;
+    margin-left: 4px;
+}
+
+.quick-themer-header-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.quick-themer-header-btn:active {
+    background-color: rgba(255, 255, 255, 0.25);
+}

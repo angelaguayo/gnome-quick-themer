@@ -1,0 +1,33 @@
+@import "../scss/variables";
+@import "../scss/metrics";
+
+/* Everforest Pad OSD for GNOME Shell 51 */
+.Leader {
+    stroke-width: .5 !important;
+    stroke: $border-active;
+    fill: none !important;
+}
+
+.Button {
+    stroke-width: .25;
+    stroke: $accent-color;
+    fill: $surface-elevated;
+}
+
+.Ring {
+    stroke-width: .5 !important;
+    stroke: $border-active !important;
+    fill: none !important;
+}
+
+.Label {
+    stroke: none !important;
+    stroke-width: .1 !important;
+    fill: transparent !important;
+}
+
+.TouchStrip, .TouchRing {
+    stroke-width: .1 !important;
+    stroke: $accent-color !important;
+    fill: $surface-elevated !important;
+}

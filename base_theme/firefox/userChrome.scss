@@ -1,0 +1,325 @@
+/* ===================================================================
+ * GNOME THEME STUDIO - FIREFOX USERCHROME.CSS
+ * Pixel-Perfect GTK & GNOME Integration for Mozilla Firefox
+ * =================================================================== */
+
+@import "../scss/variables";
+@import "../scss/metrics";
+
+:root {
+  /* Dynamic Theme Variables */
+  --gnome-accent-color:          #{$accent-color};
+  --gnome-accent-fg:             #{$accent-fg};
+  --gnome-window-bg:             #{$window-bg};
+  --gnome-sidebar-bg:            #{$sidebar-bg};
+  --gnome-surface:               #{$surface-elevated};
+  --gnome-headerbar-bg:          #{$headerbar-bg};
+  --gnome-text-primary:          #{$text-primary};
+  --gnome-text-muted:            #{$text-muted};
+  --gnome-border-color:          #{$border-color};
+  --gnome-border-active:         #{$border-active};
+  --gnome-destructive-color:     #{$destructive-color};
+  --gnome-warning-color:         #{$warning-color};
+  --gnome-button-radius:         #{$button-radius}px;
+
+  /* Native Firefox Toolbar Variables Override */
+  --toolbar-bgcolor:                     var(--gnome-headerbar-bg) !important;
+  --toolbar-color:                       var(--gnome-text-primary) !important;
+  --toolbarbutton-border-radius:         var(--gnome-button-radius) !important;
+  --toolbarbutton-hover-background:      rgba(255, 255, 255, 0.08) !important;
+  --toolbarbutton-active-background:     rgba(255, 255, 255, 0.15) !important;
+  --lwt-toolbar-field-background-color:  var(--gnome-surface) !important;
+  --lwt-toolbar-field-color:             var(--gnome-text-primary) !important;
+  --lwt-toolbar-field-focus:             var(--gnome-surface) !important;
+  --lwt-toolbar-field-focus-color:       var(--gnome-text-primary) !important;
+  --lwt-selected-tab-background-color:   var(--gnome-surface) !important;
+}
+
+/* 1. Window Toolbox & Headerbar Container */
+#navigator-toolbox {
+  background-color: var(--gnome-headerbar-bg) !important;
+  border-bottom: 1px solid var(--gnome-border-color) !important;
+  color: var(--gnome-text-primary) !important;
+}
+
+/* 2. Tabs Bar */
+#TabsToolbar {
+  background-color: var(--gnome-headerbar-bg) !important;
+  color: var(--gnome-text-primary) !important;
+}
+
+/* Inactive tabs */
+.tabbrowser-tab .tab-background {
+  border-radius: var(--gnome-button-radius) !important;
+  margin-block: 4px !important;
+  border: 1px solid transparent !important;
+  transition: background-color 150ms ease, border-color 150ms ease !important;
+}
+
+.tabbrowser-tab:hover .tab-background:not([selected="true"]) {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Active / Selected Tab */
+.tabbrowser-tab[selected="true"] .tab-background {
+  background-color: var(--gnome-surface) !important;
+  border-color: var(--gnome-border-color) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+.tabbrowser-tab[selected="true"] {
+  color: var(--gnome-text-primary) !important;
+  font-weight: 500 !important;
+}
+
+.tabbrowser-tab:not([selected="true"]) {
+  color: var(--gnome-text-muted) !important;
+}
+
+/* Accent indicator on top of the active tab */
+.tabbrowser-tab[selected="true"] .tab-background::before {
+  content: "";
+  display: block;
+  height: 2px;
+  background-color: var(--gnome-accent-color);
+  border-radius: 2px 2px 0 0;
+  margin: 0 8px;
+}
+
+/* 3. Navigation Bar (URL bar row) */
+#nav-bar {
+  background-color: var(--gnome-headerbar-bg) !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 3px 6px !important;
+}
+
+/* 4. URL Bar / Omnibox */
+#urlbar-background {
+  background-color: var(--gnome-surface) !important;
+  border: 1px solid var(--gnome-border-color) !important;
+  border-radius: var(--gnome-button-radius) !important;
+  transition: border-color 150ms ease, box-shadow 150ms ease !important;
+}
+
+#urlbar:not([focused="true"]):hover > #urlbar-background {
+  border-color: var(--gnome-border-active) !important;
+}
+
+#urlbar[focused="true"] > #urlbar-background {
+  border-color: var(--gnome-accent-color) !important;
+  box-shadow: 0 0 0 1.5px var(--gnome-accent-color) !important;
+}
+
+#urlbar-input {
+  color: var(--gnome-text-primary) !important;
+}
+
+/* 5. Bookmarks Bar */
+#PersonalToolbar {
+  background-color: var(--gnome-headerbar-bg) !important;
+  color: var(--gnome-text-muted) !important;
+  border-bottom: 1px solid var(--gnome-border-color) !important;
+}
+
+#PersonalToolbar toolbarbutton {
+  border-radius: var(--gnome-button-radius) !important;
+  color: var(--gnome-text-primary) !important;
+}
+
+/* 6. Context Menus, Popups, and Dropdowns */
+menupopup, panelmultiview, .panel-subview-body {
+  --panel-background: var(--gnome-window-bg) !important;
+  --panel-color: var(--gnome-text-primary) !important;
+  --panel-border-color: var(--gnome-border-color) !important;
+  background-color: var(--gnome-window-bg) !important;
+  color: var(--gnome-text-primary) !important;
+  border: 1px solid var(--gnome-border-color) !important;
+  border-radius: 10px !important;
+}
+
+menuitem:hover, menu:hover, .subviewbutton:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--gnome-text-primary) !important;
+  border-radius: 6px !important;
+}
+
+/* 7. Sidebar (Bookmarks, History, Sidebery / Tree Style Tab) */
+#sidebar-box, #sidebar-header {
+  background-color: var(--gnome-sidebar-bg) !important;
+  color: var(--gnome-text-primary) !important;
+  border-right: 1px solid var(--gnome-border-color) !important;
+}
+
+#sidebar-header {
+  border-bottom: 1px solid var(--gnome-border-color) !important;
+}
+
+/* 8. Find Bar (Ctrl + F) */
+findbar {
+  background-color: var(--gnome-surface) !important;
+  border-top: 1px solid var(--gnome-border-color) !important;
+  color: var(--gnome-text-primary) !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+/* 9. Window Control Buttons (Matching GNOME & GTK 4 Libadwaita architecture) */
+/* El botón contenedor exterior es 100% transparente para que el círculo
+ * sea ÚNICAMENTE el elemento interno (.toolbarbutton-icon / image),
+ * evitando cualquier desfase o desborde del color durante el hover. */
+.titlebar-button,
+.titlebar-button:hover,
+.titlebar-button:active {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.titlebar-button > .toolbarbutton-icon,
+.titlebar-button > image {
+  border-radius: 9999px !important;
+  transition: background-color 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              stroke 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+@if $window-controls-style == "macos" {
+  .titlebar-button.titlebar-close > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close > image {
+    background-color: #ff5f56 !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+    stroke: currentColor !important;
+  }
+  .titlebar-button.titlebar-close:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close:hover > image {
+    background-color: #e0443e !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+  .titlebar-button.titlebar-close:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close:active > image {
+    background-color: #cd6769 !important;
+  }
+
+  .titlebar-button.titlebar-min > .toolbarbutton-icon,
+  .titlebar-button.titlebar-min > image {
+    background-color: #ffbd2e !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+    stroke: currentColor !important;
+  }
+  .titlebar-button.titlebar-min:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-min:hover > image {
+    background-color: #dea123 !important;
+    color: #232a2e !important;
+    stroke: #232a2e !important;
+  }
+  .titlebar-button.titlebar-min:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-min:active > image {
+    background-color: #c2a366 !important;
+  }
+
+  .titlebar-button.titlebar-max > .toolbarbutton-icon,
+  .titlebar-button.titlebar-max > image,
+  .titlebar-button.titlebar-restore > .toolbarbutton-icon,
+  .titlebar-button.titlebar-restore > image {
+    background-color: #27c93f !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+    stroke: currentColor !important;
+  }
+  .titlebar-button.titlebar-max:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-max:hover > image,
+  .titlebar-button.titlebar-restore:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-restore:hover > image {
+    background-color: #1aab29 !important;
+    color: #232a2e !important;
+    stroke: #232a2e !important;
+  }
+  .titlebar-button.titlebar-max:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-max:active > image,
+  .titlebar-button.titlebar-restore:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-restore:active > image {
+    background-color: #8fa869 !important;
+  }
+} @else if $window-controls-style == "accent" {
+  .titlebar-button > .toolbarbutton-icon,
+  .titlebar-button > image {
+    background-color: var(--gnome-accent-color) !important;
+    color: var(--gnome-accent-fg) !important;
+    stroke: currentColor !important;
+  }
+  .titlebar-button.titlebar-close:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close:hover > image {
+    background-color: var(--gnome-destructive-color) !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+  .titlebar-button.titlebar-close:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close:active > image {
+    background-color: color-mix(in srgb, var(--gnome-destructive-color) 80%, black) !important;
+  }
+} @else if $window-controls-style == "monochrome" {
+  .titlebar-button > .toolbarbutton-icon,
+  .titlebar-button > image {
+    background-color: color-mix(in srgb, var(--gnome-text-primary) 12%, transparent) !important;
+    color: var(--gnome-text-primary) !important;
+    stroke: currentColor !important;
+  }
+  .titlebar-button.titlebar-close:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close:hover > image {
+    background-color: var(--gnome-destructive-color) !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+  .titlebar-button.titlebar-min:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-min:hover > image,
+  .titlebar-button.titlebar-max:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-max:hover > image,
+  .titlebar-button.titlebar-restore:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-restore:hover > image {
+    background-color: color-mix(in srgb, var(--gnome-text-primary) 22%, transparent) !important;
+  }
+} @else {
+  /* Default: traffic-hover (discreet default, semaphoric on hover) */
+  .titlebar-button.titlebar-close:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close:hover > image {
+    background-color: var(--gnome-destructive-color) !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+  .titlebar-button.titlebar-close:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-close:active > image {
+    background-color: color-mix(in srgb, var(--gnome-destructive-color) 80%, black) !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+
+  .titlebar-button.titlebar-min:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-min:hover > image {
+    background-color: var(--gnome-warning-color) !important;
+    color: #232a2e !important;
+    stroke: #232a2e !important;
+  }
+  .titlebar-button.titlebar-min:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-min:active > image {
+    background-color: color-mix(in srgb, var(--gnome-warning-color) 80%, black) !important;
+    color: #232a2e !important;
+    stroke: #232a2e !important;
+  }
+
+  .titlebar-button.titlebar-max:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-max:hover > image,
+  .titlebar-button.titlebar-restore:hover > .toolbarbutton-icon,
+  .titlebar-button.titlebar-restore:hover > image {
+    background-color: var(--gnome-accent-color) !important;
+    color: var(--gnome-accent-fg) !important;
+    stroke: var(--gnome-accent-fg) !important;
+  }
+  .titlebar-button.titlebar-max:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-max:active > image,
+  .titlebar-button.titlebar-restore:active > .toolbarbutton-icon,
+  .titlebar-button.titlebar-restore:active > image {
+    background-color: color-mix(in srgb, var(--gnome-accent-color) 80%, black) !important;
+    color: var(--gnome-accent-fg) !important;
+    stroke: var(--gnome-accent-fg) !important;
+  }
+}

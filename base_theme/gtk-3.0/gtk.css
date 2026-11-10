@@ -1,0 +1,425 @@
+/* ===================================================================
+ * EVERFOREST GTK 3 THEME - MODO OSCURO
+ * ===================================================================
+ * Basado 100% en la estructura, márgenes y geometría de Adwaita-dark.
+ *
+ * PALETA DE COLORES EVERFOREST DARK (Guía Oficial):
+ * 1.  Everforest Dark  (#2d353b) -> Fondo principal de la ventana
+ * 2.  Forest Green     (#a7c080) -> Acento primario, selección, switches
+ * 3.  Aqua/Sage        (#83c092) -> Acento secundario teal, hover activo
+ * 4.  Muted Yellow     (#dbbc7f) -> Advertencias, favoritos y avisos
+ * 5.  Terracotta       (#e69875) -> Naranja, avisos especiales, badges
+ * 6.  Slate Blue       (#7fbbb3) -> Información, enlaces (links) y badges
+ * 7.  Warm Red         (#e67e80) -> Destructivo, error y botón cerrar
+ * 8.  Lavender         (#d699b6) -> Púrpura, enlaces visitados y tags
+ * 9.  Tonos crema      (#d3c63b) -> Resaltados de búsqueda y chips dorados
+ * 10. Texto crema      (#d3c6aa) -> Texto principal y primer plano
+ * 11. Gris apagado     (#859289) -> Texto secundario, subtítulos y atajos
+ * =================================================================== */
+
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
+
+/* ===================================================================
+ * SECCIÓN 1: PALETA BASE HEXADECIMAL
+ * =================================================================== */
+
+/* 1. Everforest Dark y fondos */
+@define-color ef_bg_dim         #232a2e; /* Fondo oscuro profundo (Barras de título, menús) */
+@define-color ef_bg0            #2d353b; /* Everforest Dark: Fondo principal */
+@define-color ef_bg1            #272e33; /* Fondo de áreas de lectura y listas (View) */
+@define-color ef_bg2            #343f44; /* Fondo de tarjetas, botones y superficies elevadas */
+@define-color ef_bg3            #3d484d; /* Bordes suaves y estado hover */
+@define-color ef_bg4            #475258; /* Bordes activos y elementos destacados */
+@define-color ef_bg5            #56635f; /* Bordes más claros o separadores */
+
+/* 10 y 11. Tipografía y textos */
+@define-color ef_fg             #d3c6aa; /* Texto crema: Texto principal (cálido, legible) */
+@define-color ef_fg_muted       #859289; /* Gris apagado: Texto secundario, subtítulos y atajos */
+@define-color ef_gray_muted     #859289; /* Gris apagado alias */
+@define-color ef_fg_subtle      #7a8478; /* Texto deshabilitado o de menor jerarquía */
+
+/* 2 a 9. Colores cromáticos de acento */
+@define-color ef_green          #a7c080; /* Forest Green: Acento principal, éxito, selección */
+@define-color ef_aqua           #83c092; /* Aqua/Sage: Acento secundario, focus, hover */
+@define-color ef_yellow         #dbbc7f; /* Muted Yellow: Advertencias */
+@define-color ef_orange         #e69875; /* Terracotta: Avisos especiales, acento alternativo */
+@define-color ef_terracotta     #e69875; /* Terracotta alias */
+@define-color ef_blue           #7fbbb3; /* Slate Blue: Información, enlaces primarios */
+@define-color ef_red            #e67e80; /* Warm Red: Peligro, eliminar, botón cerrar hover */
+@define-color ef_purple         #d699b6; /* Lavender: Púrpura, acentos especiales, tags */
+@define-color ef_lavender       #d699b6; /* Lavender alias */
+@define-color ef_cream          #d3c63b; /* Tonos crema: Resaltado y acento dorado */
+@define-color ef_cream_bg       #f6efd5; /* Crema claro alternativo de la paleta */
+
+/* ===================================================================
+ * SECCIÓN 2: ASIGNACIÓN DE COLORES A ELEMENTOS GTK 3
+ * =================================================================== */
+
+@define-color theme_bg_color            @ef_bg0;     /* Fondo de ventana (Everforest Dark) */
+@define-color theme_fg_color            @ef_fg;      /* Texto de ventana (Texto crema) */
+@define-color theme_base_color          @ef_bg1;     /* Fondo de cajas de texto y listas */
+@define-color theme_text_color          @ef_fg;      /* Texto en cajas de texto */
+@define-color theme_selected_bg_color   @ef_green;   /* Forest Green */
+@define-color theme_selected_fg_color   #232a2e;     /* Texto oscuro de selección */
+
+@define-color insensitive_bg_color      @ef_bg1;     /* Fondo deshabilitado */
+@define-color insensitive_fg_color      @ef_fg_subtle; /* Texto deshabilitado */
+@define-color insensitive_base_color    @ef_bg1;
+
+@define-color theme_unfocused_bg_color          @ef_bg0;
+@define-color theme_unfocused_fg_color          @ef_fg_muted; /* Gris apagado */
+@define-color theme_unfocused_base_color        @ef_bg1;
+@define-color theme_unfocused_selected_bg_color @ef_bg3;
+@define-color theme_unfocused_selected_fg_color @ef_fg;
+
+@define-color borders                   @ef_bg3;     /* Bordes generales */
+@define-color unfocused_borders         @ef_bg2;     /* Bordes inactivos */
+
+@define-color warning_color             @ef_yellow;  /* Muted Yellow */
+@define-color error_color               @ef_red;     /* Warm Red */
+@define-color success_color             @ef_aqua;    /* Aqua/Sage */
+@define-color info_color                @ef_blue;    /* Slate Blue */
+@define-color destructive_color         @ef_red;     /* Warm Red */
+@define-color link_color                @ef_blue;    /* Slate Blue */
+@define-color link_visited_color        @ef_purple;  /* Lavender */
+
+@define-color content_view_bg           @ef_bg1;
+@define-color tooltip_bg_color          @ef_bg_dim;
+@define-color tooltip_fg_color          @ef_fg;
+
+/* ===================================================================
+ * SECCIÓN 3: COMPORTAMIENTO INTERNO DE WIDGETS GTK 3
+ * =================================================================== */
+
+/* Ventanas y Vistas */
+window, .background {
+  background-color: @theme_bg_color;
+  color: @theme_fg_color;
+}
+
+.view, textview text {
+  background-color: @theme_base_color;
+  color: @theme_text_color;
+}
+
+.view:backdrop, textview text:backdrop {
+  background-color: @theme_unfocused_base_color;
+  color: @theme_unfocused_fg_color;
+}
+
+.view:selected, textview text:selected {
+  background-color: @theme_selected_bg_color;
+  color: @theme_selected_fg_color;
+}
+
+/* Barras de Título / Headerbar */
+headerbar, .titlebar {
+  background-color: @ef_bg_dim;
+  border-color: @borders;
+  color: @theme_fg_color;
+}
+
+headerbar:backdrop, .titlebar:backdrop {
+  background-color: @ef_bg_dim;
+  border-color: @unfocused_borders;
+  color: @ef_fg_subtle;
+}
+
+headerbar .title, .titlebar .title {
+  color: @theme_fg_color;
+}
+
+headerbar .subtitle, .titlebar .subtitle {
+  color: @ef_fg_muted; /* Gris apagado */
+}
+
+/* ===================================================================
+ * BOTONES DE VENTANA TIPO SEMÁFORO (GTK 3)
+ * ===================================================================
+ * Para cambiar el tamaño del círculo de hover:
+ * - Modifica 'min-width' / 'min-height' y 'padding' en 'button.titlebutton':
+ *   * min-width: 18px / padding: 2px -> Más pequeño y ajustado
+ *   * min-width: 20px / padding: 2.5px -> Tamaño intermedio refinado (Recomendado)
+ *   * min-width: 24px / padding: 4px -> Tamaño estándar más amplio
+ * =================================================================== */
+button.titlebutton {
+  color: @theme_fg_color;
+  border-radius: 9999px;
+  min-width: 20px;
+  min-height: 20px;
+  padding: 2.5px;
+  margin: 3px 2px;
+  transition: background-color 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+button.titlebutton:hover {
+  background-color: rgba(211, 198, 170, 0.15);
+  border-radius: 9999px;
+}
+
+button.titlebutton:active {
+  background-color: rgba(211, 198, 170, 0.25);
+  border-radius: 9999px;
+}
+
+button.titlebutton:backdrop {
+  color: @ef_fg_subtle;
+  opacity: 0.7;
+}
+
+/* Semáforo en Hover (Solo el círculo) */
+button.titlebutton.close:hover,
+headerbar button.titlebutton.close:hover {
+  background-color: @ef_red; /* Warm Red #e67e80 */
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+button.titlebutton.minimize:hover,
+headerbar button.titlebutton.minimize:hover {
+  background-color: @ef_yellow; /* Muted Yellow #dbbc7f */
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+button.titlebutton.maximize:hover,
+headerbar button.titlebutton.maximize:hover {
+  background-color: @ef_green; /* Forest Green #a7c080 */
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+/* Semáforo en Active (Click) */
+button.titlebutton.close:active,
+headerbar button.titlebutton.close:active {
+  background-color: #cd6769;
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+button.titlebutton.minimize:active,
+headerbar button.titlebutton.minimize:active {
+  background-color: #c2a366;
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+button.titlebutton.maximize:active,
+headerbar button.titlebutton.maximize:active {
+  background-color: #8fa869;
+  color: #232a2e;
+  border-radius: 9999px;
+}
+
+/* Botones estándar */
+button {
+  background-color: @ef_bg2;
+  color: @theme_fg_color;
+  border-color: @borders;
+  background-image: none;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: @ef_bg3;
+  border-color: @ef_bg4;
+}
+
+button:active, button:checked {
+  background-color: @theme_selected_bg_color;
+  color: @theme_selected_fg_color;
+  border-color: @theme_selected_bg_color;
+}
+
+button:disabled {
+  background-color: @ef_bg1;
+  color: @insensitive_fg_color;
+  border-color: @ef_bg2;
+}
+
+button.flat {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+button.flat:hover {
+  background-color: rgba(211, 198, 170, 0.12);
+}
+
+button.suggested-action {
+  background-color: @theme_selected_bg_color; /* Forest Green */
+  color: @theme_selected_fg_color;
+  border-color: @theme_selected_bg_color;
+}
+
+button.destructive-action {
+  background-color: @destructive_color; /* Warm Red */
+  color: #232a2e;
+  border-color: @destructive_color;
+}
+
+/* Enlaces (Slate Blue & Lavender) */
+link, a, .link {
+  color: @ef_blue; /* Slate Blue */
+}
+
+link:hover, a:hover, .link:hover {
+  color: @ef_aqua; /* Aqua/Sage */
+}
+
+link:visited, a:visited, .link:visited {
+  color: @ef_purple; /* Lavender */
+}
+
+/* Entradas de texto */
+entry {
+  background-color: @theme_base_color;
+  color: @theme_text_color;
+  border-color: @borders;
+}
+
+entry:focus {
+  border-color: @theme_selected_bg_color; /* Forest Green */
+}
+
+/* Menús y Popovers */
+popover, .popover, menu, .menu {
+  background-color: @ef_bg0;
+  color: @theme_fg_color;
+  border-color: @borders;
+}
+
+/* Listas y Filas */
+list, .list {
+  background-color: @theme_base_color;
+  color: @theme_text_color;
+}
+
+row:selected {
+  background-color: @ef_bg3;
+  color: @theme_selected_bg_color;
+}
+
+/* Switches & Toggles */
+switch:checked {
+  background-color: @ef_green; /* Forest Green */
+  color: #232a2e;
+}
+
+/* Check & Radio */
+check:checked, radio:checked {
+  background-color: @ef_green;
+  color: #232a2e;
+  border-color: @ef_green;
+}
+
+/* Barras de progreso y niveles */
+progressbar progress {
+  background-color: @ef_green; /* Forest Green */
+}
+
+levelbar block.filled {
+  background-color: @ef_green;
+}
+
+levelbar block.low {
+  background-color: @ef_yellow; /* Muted Yellow */
+}
+
+levelbar block.high {
+  background-color: @ef_green;
+}
+
+levelbar block.full {
+  background-color: @ef_aqua; /* Aqua/Sage */
+}
+
+levelbar block.empty {
+  background-color: @ef_bg3;
+}
+
+/* Sliders y escalas */
+scale highlight {
+  background-color: @ef_green;
+}
+
+scale slider:hover {
+  background-color: @ef_aqua; /* Aqua/Sage */
+}
+
+/* Resaltado de búsqueda y texto (Tonos crema) */
+mark, .mark {
+  background-color: @ef_cream; /* Tonos crema #d3c63b */
+  color: #232a2e;
+}
+
+/* Etiquetas secundarias (Gris apagado) */
+.dim-label, .subtitle, caption {
+  color: @ef_fg_muted; /* Gris apagado #859289 */
+}
+
+/* Badges e insignias de colores Everforest */
+.badge {
+  background-color: @ef_bg3;
+  color: @ef_fg;
+}
+
+.badge.accent, .accent.badge {
+  background-color: @ef_green; /* Forest Green */
+  color: #232a2e;
+}
+
+.badge.info, .info.badge {
+  background-color: @ef_blue; /* Slate Blue */
+  color: #232a2e;
+}
+
+.badge.warning, .warning.badge {
+  background-color: @ef_yellow; /* Muted Yellow */
+  color: #232a2e;
+}
+
+.badge.error, .error.badge {
+  background-color: @ef_red; /* Warm Red */
+  color: #232a2e;
+}
+
+.badge.success, .success.badge {
+  background-color: @ef_aqua; /* Aqua/Sage */
+  color: #232a2e;
+}
+
+.badge.terracotta, .badge.orange, .orange.badge, .numeric {
+  background-color: @ef_orange; /* Terracotta */
+  color: #232a2e;
+}
+
+.badge.lavender, .badge.purple, .purple.badge {
+  background-color: @ef_purple; /* Lavender */
+  color: #232a2e;
+}
+
+.badge.cream, .cream.badge {
+  background-color: @ef_cream; /* Tonos crema */
+  color: #232a2e;
+}
+
+.badge.muted, .badge.gray, .gray.badge {
+  background-color: @ef_gray_muted; /* Gris apagado */
+  color: #232a2e;
+}
+
+/* Barras de desplazamiento */
+scrollbar slider {
+  background-color: @ef_bg4;
+}
+
+scrollbar slider:hover {
+  background-color: @theme_selected_bg_color; /* Forest Green */
+}
+
+scrollbar slider:active {
+  background-color: @ef_aqua; /* Aqua/Sage */
+}

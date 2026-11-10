@@ -1,0 +1,11 @@
+// ===================================================================
+// GNOME Theme Studio - SCSS Geometry & Metrics Variables
+// ===================================================================
+
+$window-radius:         12 !default; // Window border radius in px
+$button-radius:         8  !default; // Button & Input border radius in px
+$border-width:          1  !default; // Border width in px
+$panel-opacity:         1.0 !default; // GNOME Shell panel opacity (0.0 to 1.0)
+$popup-radius:          20 !default; // GNOME Shell popup menu radius in px
+$quick-settings-radius: 36 !default; // GNOME Shell quick settings radius in px
+$window-controls-size:  14 !default; // Size of close/min/max buttons in px

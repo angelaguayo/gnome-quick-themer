@@ -1,0 +1,26 @@
+// ===================================================================
+// GNOME Theme Studio - SCSS Default Color Palette Variables
+// ===================================================================
+
+$accent-color:        #a7c080 !default; // Primary Accent (switches, suggested buttons, selection)
+$accent-fg:           #1a201c !default; // Contrast text/icon color on top of primary accent
+$accent-secondary:    #83c092 !default; // Aqua / Sage (Secondary Accent, Focus, Hover)
+$window-bg:           #2d353b !default; // Window Background
+$sidebar-bg:          #272e33 !default; // Reading / Sidebar / View Background
+$surface-elevated:    #343f44 !default; // Cards, Elevated Surfaces, Buttons, Shell Menus
+$headerbar-bg:        #232a2e !default; // Headerbar, OSD, Top Bar Dim Background
+$text-primary:        #d3c6aa !default; // Primary Text
+$text-muted:          #859289 !default; // Secondary Muted Text
+$border-color:        #3d484d !default; // Subtle Border Color
+$border-active:       #475258 !default; // Active / Highlighted Border Color
+
+// State Colors
+$destructive-color:   #e67e80 !default; // Warm Red
+$warning-color:       #dbbc7f !default; // Muted Yellow
+$info-color:          #7fbbb3 !default; // Slate Blue
+$purple-color:        #d699b6 !default; // Lavender
+$orange-color:        #e69875 !default; // Terracotta
+
+// Window Controls
+$window-controls-size: 14 !default; // Size in px
+$window-controls-style: "traffic-hover" !default; // macos, traffic-hover, monochrome, accent

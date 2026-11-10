@@ -1,0 +1,697 @@
+/* ===================================================================
+ * EVERFOREST GTK 4 / LIBADWAITA THEME - MODO OSCURO
+ * ===================================================================
+ * Estructura y geometría 100% idéntica a Adwaita por defecto.
+ *
+ * PALETA DE COLORES EVERFOREST DARK (Guía Oficial):
+ * 1.  Everforest Dark  (#2d353b) -> Fondo principal de la ventana
+ * 2.  Forest Green     (#a7c080) -> Acento primario, selección, switches
+ * 3.  Aqua/Sage        (#83c092) -> Acento secundario teal, hover activo
+ * 4.  Muted Yellow     (#dbbc7f) -> Advertencias, favoritos y avisos
+ * 5.  Terracotta       (#e69875) -> Naranja, avisos especiales, badges
+ * 6.  Slate Blue       (#7fbbb3) -> Información, enlaces (links) y badges
+ * 7.  Warm Red         (#e67e80) -> Destructivo, error y botón cerrar
+ * 8.  Lavender         (#d699b6) -> Púrpura, enlaces visitados y tags
+ * 9.  Tonos crema      (#d3c63b) -> Resaltados de búsqueda y chips dorados
+ * 10. Texto crema      (#d3c6aa) -> Texto principal y primer plano
+ * 11. Gris apagado     (#859289) -> Texto secundario, subtítulos y atajos
+ * =================================================================== */
+
+@import "../scss/variables";
+@import "../scss/metrics";
+
+/* ===================================================================
+ * SECCIÓN 1: PALETA BASE DINÁMICA
+ * =================================================================== */
+@define-color ef_bg_dim         #{$headerbar-bg};
+@define-color ef_bg0            #{$window-bg};
+@define-color ef_bg1            #{$sidebar-bg};
+@define-color ef_bg2            #{$surface-elevated};
+@define-color ef_bg3            #{$border-color};
+@define-color ef_bg4            #{$border-active};
+@define-color ef_bg5            #{$border-active};
+
+@define-color ef_fg             #{$text-primary};
+@define-color ef_fg_muted       #{$text-muted};
+@define-color ef_gray_muted     #{$text-muted};
+@define-color ef_fg_subtle      #{$text-muted};
+
+@define-color ef_green          #{$accent-color};
+@define-color ef_aqua           #{$accent-secondary};
+@define-color ef_yellow         #{$warning-color};
+@define-color ef_orange         #{$orange-color};
+@define-color ef_terracotta     #{$orange-color};
+@define-color ef_blue           #{$info-color};
+@define-color ef_red            #{$destructive-color};
+@define-color ef_purple         #{$purple-color};
+@define-color ef_lavender       #{$purple-color};
+@define-color ef_cream          #dbbc7f;
+@define-color ef_cream_bg       #f6efd5;
+
+/* ===================================================================
+ * SECCIÓN 2: ASIGNACIÓN DE COLORES A ELEMENTOS DE LA INTERFAZ
+ * =================================================================== */
+
+/* --- 2.1 Colores de Acento y Estados Semánticos (Libadwaita) --- */
+@define-color accent_color              #{"@ef_green"};   /* Forest Green */
+@define-color accent_bg_color           #{"@ef_green"};   /* Fondo de botones principales y toggles */
+@define-color accent_fg_color           #{$accent-fg};    /* Texto sobre fondo de acento */
+
+@define-color destructive_color         #{"@ef_red"};     /* Warm Red */
+@define-color destructive_bg_color      #{"@ef_red"};     /* Fondo de botones destructivos */
+@define-color destructive_fg_color      #ffffff;
+
+@define-color success_color             #{"@ef_aqua"};    /* Aqua/Sage */
+@define-color success_bg_color          #{"@ef_aqua"};
+@define-color success_fg_color          #{$accent-fg};
+
+@define-color warning_color             #{"@ef_yellow"};  /* Muted Yellow */
+@define-color warning_bg_color          #{"@ef_yellow"};
+@define-color warning_fg_color          #232a2e;
+
+@define-color error_color               #{"@ef_red"};     /* Warm Red */
+@define-color error_bg_color            #{"@ef_red"};
+@define-color error_fg_color            #ffffff;
+
+@define-color info_color                #{"@ef_blue"};    /* Slate Blue */
+@define-color link_color                #{"@ef_blue"};    /* Slate Blue */
+@define-color link_visited_color        #{"@ef_purple"};  /* Lavender */
+
+/* --- 2.2 Paleta de Acentos de Libadwaita (Sistema GNOME 47+) --- */
+@define-color blue_1    #7fbbb3;
+@define-color blue_2    #7fbbb3;
+@define-color blue_3    #7fbbb3;
+@define-color blue_4    #68a098;
+@define-color blue_5    #52857e;
+
+@define-color green_1   #a7c080;
+@define-color green_2   #a7c080;
+@define-color green_3   #a7c080;
+@define-color green_4   #8fa869;
+@define-color green_5   #779053;
+
+@define-color yellow_1  #dbbc7f;
+@define-color yellow_2  #dbbc7f;
+@define-color yellow_3  #dbbc7f;
+@define-color yellow_4  #c2a366;
+@define-color yellow_5  #a98a4e;
+
+@define-color orange_1  #e69875;
+@define-color orange_2  #e69875;
+@define-color orange_3  #e69875;
+@define-color orange_4  #cd805e;
+@define-color orange_5  #b46848;
+
+@define-color red_1     #e67e80;
+@define-color red_2     #e67e80;
+@define-color red_3     #e67e80;
+@define-color red_4     #cd6769;
+@define-color red_5     #b45053;
+
+@define-color purple_1  #d699b6;
+@define-color purple_2  #d699b6;
+@define-color purple_3  #d699b6;
+@define-color purple_4  #bd819d;
+@define-color purple_5  #a46a85;
+
+@define-color teal_1    #83c092;
+@define-color teal_2    #83c092;
+@define-color teal_3    #83c092;
+@define-color teal_4    #6ca77b;
+@define-color teal_5    #558f64;
+
+@define-color slate_1   #859289;
+@define-color slate_2   #859289;
+@define-color slate_3   #859289;
+@define-color slate_4   #6f7b73;
+@define-color slate_5   #59645d;
+
+/* --- 2.3 Fondo de Ventana y Vistas de Contenido --- */
+@define-color window_bg_color           #{"@ef_bg0"};     /* Everforest Dark (#2d353b) */
+@define-color window_fg_color           #{"@ef_fg"};      /* Texto crema (#d3c6aa) */
+
+@define-color view_bg_color             #{"@ef_bg1"};     /* Fondo de vistas (listas, editores) */
+@define-color view_fg_color             #{"@ef_fg"};
+
+/* --- 2.4 Barra Superior y de Título (Headerbar / Titlebar) --- */
+@define-color headerbar_bg_color        #{"@ef_bg_dim"};  /* Fondo barra de título */
+@define-color headerbar_fg_color        #{"@ef_fg"};
+@define-color headerbar_border_color    #{"@ef_bg3"};     /* Borde divisorio */
+@define-color headerbar_backdrop_color  #{"@ef_bg_dim"};
+@define-color headerbar_shade_color     rgba(0, 0, 0, 0.36);
+@define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.90);
+
+/* --- 2.5 Paneles Laterales (Sidebars) --- */
+@define-color sidebar_bg_color          #{"@ef_bg1"};
+@define-color sidebar_fg_color          #{"@ef_fg"};
+@define-color sidebar_backdrop_color    #{"@ef_bg_dim"};
+@define-color sidebar_shade_color       rgba(0, 0, 0, 0.25);
+@define-color sidebar_border_color      #{"@ef_bg3"};
+
+@define-color secondary_sidebar_bg_color       #{"@ef_bg0"};
+@define-color secondary_sidebar_fg_color       #{"@ef_fg"};
+@define-color secondary_sidebar_backdrop_color #{"@ef_bg_dim"};
+@define-color secondary_sidebar_shade_color    rgba(0, 0, 0, 0.25);
+@define-color secondary_sidebar_border_color   #{"@ef_bg3"};
+
+/* --- 2.6 Tarjetas, Diálogos y Menús Emergentes (Cards, Dialogs, Popovers) --- */
+@define-color card_bg_color             rgba(255, 255, 255, 0.05);
+@define-color card_fg_color             #{"@ef_fg"};
+@define-color card_border_color         #{"@ef_bg3"};
+@define-color card_shade_color          rgba(0, 0, 0, 0.25);
+
+@define-color dialog_bg_color           #{"@ef_bg0"};
+@define-color dialog_fg_color           #{"@ef_fg"};
+
+@define-color popover_bg_color          #{"@ef_bg0"};
+@define-color popover_fg_color          #{"@ef_fg"};
+@define-color popover_shade_color       rgba(0, 0, 0, 0.25);
+
+@define-color thumbnail_bg_color        #{"@ef_bg2"};
+@define-color thumbnail_fg_color        #{"@ef_fg"};
+
+/* --- 2.7 Detalles, Bordes y Barras de Desplazamiento --- */
+@define-color shade_color               rgba(0, 0, 0, 0.25);
+@define-color scrollbar_outline_color   rgba(0, 0, 0, 0.5);
+@define-color borders                   #{"@ef_bg3"};
+@define-color unfocused_borders         #{"@ef_bg2"};
+@define-color insensitive_bg_color      #{"@ef_bg1"};
+@define-color insensitive_fg_color      #{"@ef_fg_subtle"};
+@define-color tooltip_bg_color          #{"@ef_bg_dim"};
+@define-color tooltip_fg_color          #{"@ef_fg"};
+
+/* Variables GTK 3/4 adicionales de compatibilidad */
+@define-color theme_bg_color                   #{"@window_bg_color"};
+@define-color theme_fg_color                   #{"@window_fg_color"};
+@define-color theme_base_color                 #{"@view_bg_color"};
+@define-color theme_text_color                 #{"@view_fg_color"};
+@define-color theme_selected_bg_color          #{"@accent_bg_color"};
+@define-color theme_selected_fg_color          #{"@accent_fg_color"};
+@define-color theme_unfocused_bg_color         #{"@window_bg_color"};
+@define-color theme_unfocused_fg_color         #{"@ef_fg_muted"};
+@define-color theme_unfocused_base_color       #{"@view_bg_color"};
+@define-color theme_unfocused_selected_bg_color #{"@ef_bg3"};
+@define-color theme_unfocused_selected_fg_color #{"@ef_fg"};
+
+/* ===================================================================
+ * SECCIÓN 3: COMPORTAMIENTO INTERNO Y MODO OSCURO DE LIBADWAITA
+ * =================================================================== */
+@media (prefers-color-scheme: dark) {
+  @define-color accent_color              #{"@ef_green"};
+  @define-color accent_bg_color           #{"@ef_green"};
+  @define-color accent_fg_color           #{$accent-fg};
+
+  @define-color destructive_color         #{"@ef_red"};
+  @define-color destructive_bg_color      #{"@ef_red"};
+  @define-color destructive_fg_color      #ffffff;
+
+  @define-color success_color             #{"@ef_aqua"};
+  @define-color success_bg_color          #{"@ef_aqua"};
+  @define-color success_fg_color          #{$accent-fg};
+
+  @define-color warning_color             #{"@ef_yellow"};
+  @define-color warning_bg_color          #{"@ef_yellow"};
+  @define-color warning_fg_color          #232a2e;
+
+  @define-color error_color               #{"@ef_red"};
+  @define-color error_bg_color            #{"@ef_red"};
+  @define-color error_fg_color            #ffffff;
+
+  @define-color info_color                #{"@ef_blue"};
+  @define-color link_color                #{"@ef_blue"};
+  @define-color link_visited_color        #{"@ef_purple"};
+
+  @define-color window_bg_color           #{"@ef_bg0"};
+  @define-color window_fg_color           #{"@ef_fg"};
+
+  @define-color view_bg_color             #{"@ef_bg1"};
+  @define-color view_fg_color             #{"@ef_fg"};
+
+  @define-color headerbar_bg_color        #{"@ef_bg_dim"};
+  @define-color headerbar_fg_color        #{"@ef_fg"};
+  @define-color headerbar_border_color    #{"@ef_bg3"};
+  @define-color headerbar_backdrop_color  #{"@ef_bg_dim"};
+  @define-color headerbar_shade_color     rgba(0, 0, 0, 0.36);
+  @define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.90);
+
+  @define-color sidebar_bg_color          #{"@ef_bg1"};
+  @define-color sidebar_fg_color          #{"@ef_fg"};
+  @define-color sidebar_backdrop_color    #{"@ef_bg_dim"};
+  @define-color sidebar_shade_color       rgba(0, 0, 0, 0.25);
+  @define-color sidebar_border_color      #{"@ef_bg3"};
+
+  @define-color secondary_sidebar_bg_color       #{"@ef_bg0"};
+  @define-color secondary_sidebar_fg_color       #{"@ef_fg"};
+  @define-color secondary_sidebar_backdrop_color #{"@ef_bg_dim"};
+  @define-color secondary_sidebar_shade_color    rgba(0, 0, 0, 0.25);
+  @define-color secondary_sidebar_border_color   #{"@ef_bg3"};
+
+  @define-color card_bg_color             rgba(255, 255, 255, 0.05);
+  @define-color card_fg_color             #{"@ef_fg"};
+  @define-color card_border_color         #{"@ef_bg3"};
+  @define-color card_shade_color          rgba(0, 0, 0, 0.25);
+
+  @define-color dialog_bg_color           #{"@ef_bg0"};
+  @define-color dialog_fg_color           #{"@ef_fg"};
+
+  @define-color popover_bg_color          #{"@ef_bg0"};
+  @define-color popover_fg_color          #{"@ef_fg"};
+  @define-color popover_shade_color       rgba(0, 0, 0, 0.25);
+
+  @define-color thumbnail_bg_color        #{"@ef_bg2"};
+  @define-color thumbnail_fg_color        #{"@ef_fg"};
+
+  @define-color shade_color               rgba(0, 0, 0, 0.25);
+  @define-color scrollbar_outline_color   rgba(0, 0, 0, 0.5);
+
+  @define-color theme_bg_color            #{"@window_bg_color"};
+  @define-color theme_fg_color            #{"@window_fg_color"};
+  @define-color theme_base_color          #{"@view_bg_color"};
+  @define-color theme_text_color          #{"@view_fg_color"};
+  @define-color theme_selected_bg_color   #{"@accent_bg_color"};
+  @define-color theme_selected_fg_color   #{"@accent_fg_color"};
+  @define-color borders                   #{"@ef_bg3"};
+  @define-color unfocused_borders         #{"@ef_bg2"};
+  @define-color theme_unfocused_bg_color  #{"@window_bg_color"};
+  @define-color theme_unfocused_fg_color  #{"@ef_fg_muted"};
+  @define-color theme_unfocused_base_color #{"@view_bg_color"};
+  @define-color theme_unfocused_selected_bg_color #{"@ef_bg3"};
+  @define-color theme_unfocused_selected_fg_color #{"@ef_fg"};
+}
+
+/* ===================================================================
+ * SECCIÓN 4: WIDGETS Y CLASES SEMÁNTICAS (GTK 4 / LIBADWAITA)
+ * =================================================================== */
+
+/* Compatibilidad para apps GTK 4 clásicas (excluyendo popovers y popups) */
+window:not(popover):not(.popup),
+.background:not(popover):not(.popup):not(contents) {
+  background-color: #{"@window_bg_color"};
+  color: #{"@window_fg_color"};
+}
+
+/* ===================================================================
+ * POPOVERS Y MENÚS FLOTANTES (LIBADWAITA & GTK 4)
+ * ===================================================================
+ * El contenedor exterior (window.popup y popover) debe ser 100% transparente
+ * para que el margen de amortiguación de la sombra no se rellene con color
+ * ni cree recuadros alrededor del menú contextual.
+ * El fondo, radio de curvatura y sombra pertenecen ÚNICAMENTE a `contents`.
+ * =================================================================== */
+window.popup,
+window.popup.background,
+popover,
+popover.background,
+popover.menu,
+.popover {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+popover > contents,
+popover.menu > contents {
+  background-color: #{"@popover_bg_color"};
+  color: #{"@popover_fg_color"};
+  border-radius: #{$popup-radius}px;
+  border: 1px solid #{"@borders"};
+  box-shadow: 0 4px 14px 2px rgba(0, 0, 0, 0.16),
+              0 2px 4px 1px rgba(0, 0, 0, 0.10) !important;
+}
+
+popover > arrow {
+  background-color: #{"@popover_bg_color"};
+  border-color: #{"@borders"};
+}
+
+headerbar, .titlebar {
+  background-color: #{"@headerbar_bg_color"};
+  color: #{"@headerbar_fg_color"};
+  border-color: #{"@headerbar_border_color"};
+}
+
+headerbar:backdrop, .titlebar:backdrop {
+  background-color: #{"@headerbar_backdrop_color"};
+  color: #{"@ef_fg_subtle"};
+  border-color: #{"@headerbar_border_color"};
+}
+
+/* ===================================================================
+ * REFINAMIENTO DE ALTA PRECISIÓN: ADWTOOLBARVIEW & NAUTILUS (ARCHIVOS)
+ * ===================================================================
+ * En Libadwaita moderna, los headerbars se alojan en 'toolbarview > .top-bar'.
+ * Para eliminar el desfase superior de 6px y sangrado de color de fondo:
+ * 1. .top-bar cubre desde el borde superior de la ventana con @headerbar_bg_color.
+ * 2. Los headerbars interiores son 100% transparentes sin sombras extra.
+ * 3. En el panel lateral (.sidebar-pane), .top-bar adopta uniformemente @sidebar_bg_color.
+ * =================================================================== */
+toolbarview > .top-bar {
+  background-color: #{"@headerbar_bg_color"};
+  color: #{"@headerbar_fg_color"};
+}
+
+toolbarview > .top-bar:backdrop {
+  background-color: #{"@headerbar_backdrop_color"};
+}
+
+toolbarview > .top-bar headerbar,
+toolbarview > .bottom-bar headerbar,
+headerbar.flat,
+adaptive-preview headerbar.adaptive-mode-flat {
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Panel lateral (Sidebar) en Nautilus y apps split-view */
+.sidebar-pane,
+navigation-split-view > .sidebar-pane,
+overlay-split-view > .sidebar-pane {
+  background-color: #{"@sidebar_bg_color"};
+  color: #{"@sidebar_fg_color"};
+}
+
+.sidebar-pane toolbarview > .top-bar,
+navigation-split-view > .sidebar-pane toolbarview > .top-bar,
+overlay-split-view > .sidebar-pane toolbarview > .top-bar {
+  background-color: #{"@sidebar_bg_color"} !important;
+  color: #{"@sidebar_fg_color"};
+}
+
+.sidebar-pane toolbarview > .top-bar:backdrop,
+navigation-split-view > .sidebar-pane toolbarview > .top-bar:backdrop,
+overlay-split-view > .sidebar-pane toolbarview > .top-bar:backdrop {
+  background-color: #{"@sidebar_backdrop_color"} !important;
+}
+
+/* Separador vertical limpio y alineado entre sidebar y contenido */
+.sidebar-pane separator,
+navigation-split-view > separator,
+overlay-split-view > separator {
+  background-color: #{"@headerbar_border_color"};
+  min-width: 1px;
+}
+
+/* Estilo pulido de Nautilus (barra de ruta y botones) */
+.nautilus-window.background {
+  background-color: #{"@window_bg_color"};
+}
+
+.nautilus-pathbar {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: #{$button-radius}px;
+}
+
+.nautilus-path-button {
+  border-radius: #{max(4, $button-radius - 2)}px;
+  transition: background-color 150ms ease;
+}
+
+.nautilus-path-button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.nautilus-path-button.current-dir {
+  color: #{"@accent_color"};
+  font-weight: bold;
+}
+
+.view, textview > text {
+  background-color: #{"@view_bg_color"};
+  color: #{"@view_fg_color"};
+}
+
+/* Enlaces (Slate Blue & Lavender) */
+link, a, .link {
+  color: #{"@ef_blue"}; /* Slate Blue #7fbbb3 */
+}
+
+link:hover, a:hover, .link:hover {
+  color: #{"@ef_aqua"}; /* Aqua/Sage #83c092 */
+}
+
+link:visited, a:visited, .link:visited {
+  color: #{"@ef_purple"}; /* Lavender #d699b6 */
+}
+
+/* Resaltado de búsqueda y texto (Tonos crema) */
+mark, .mark {
+  background-color: #{"@ef_cream"}; /* Tonos crema #d3c63b */
+  color: #232a2e;
+}
+
+/* Subtítulos y etiquetas secundarias (Gris apagado) */
+.dim-label, .subtitle, caption, headerbar .subtitle {
+  color: #{"@ef_fg_muted"}; /* Gris apagado #859289 */
+}
+
+/* ===================================================================
+ * BOTONES DE CONTROL DE VENTANA (Cerrar, Minimizar, Maximizar)
+ * ===================================================================
+ * Para cambiar el tamaño del círculo:
+ * - Modifica 'padding' en 'windowcontrols > button > image':
+ *   * padding: 1.5px o 2px -> Círculo pequeño, sutil y elegante (Actual)
+ *   * padding: 3px         -> Círculo mediano
+ *   * padding: 4px         -> Círculo amplio (por defecto de Libadwaita)
+ * =================================================================== */
+
+/* El botón contenedor exterior es 100% transparente para evitar cualquier recuadro */
+windowcontrols > button,
+windowcontrols > button:hover,
+windowcontrols > button:active,
+headerbar windowcontrols > button,
+headerbar windowcontrols > button:hover,
+headerbar windowcontrols > button:active {
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  border-color: transparent;
+  border-radius: 9999px;
+  padding: 4px;
+}
+
+/* El círculo es ÚNICAMENTE el elemento <image> interno */
+windowcontrols > button > image {
+  padding: 2px;
+  min-width: #{$window-controls-size}px;
+  min-height: #{$window-controls-size}px;
+  border-radius: 9999px;
+  transition: background-color 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@if $window-controls-style == "macos" {
+  windowcontrols > button.close > image {
+    background-color: #ff5f56;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  windowcontrols > button.minimize > image {
+    background-color: #ffbd2e;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  windowcontrols > button.maximize > image {
+    background-color: #27c93f;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  windowcontrols > button.close:hover > image {
+    background-color: #e0443e;
+  }
+  windowcontrols > button.minimize:hover > image {
+    background-color: #dea123;
+  }
+  windowcontrols > button.maximize:hover > image {
+    background-color: #1aab29;
+  }
+} @else if $window-controls-style == "accent" {
+  windowcontrols > button.close > image,
+  windowcontrols > button.minimize > image,
+  windowcontrols > button.maximize > image {
+    background-color: $accent-color;
+    color: $accent-fg;
+  }
+  windowcontrols > button.close:hover > image {
+    background-color: $destructive-color;
+    color: #ffffff;
+  }
+} @else if $window-controls-style == "monochrome" {
+  windowcontrols > button.close > image,
+  windowcontrols > button.minimize > image,
+  windowcontrols > button.maximize > image {
+    background-color: rgba($text-primary, 0.15);
+    color: $text-primary;
+  }
+  windowcontrols > button.close:hover > image {
+    background-color: $destructive-color;
+    color: #ffffff;
+  }
+  windowcontrols > button.minimize:hover > image,
+  windowcontrols > button.maximize:hover > image {
+    background-color: rgba($text-primary, 0.25);
+  }
+} @else {
+  /* Default: traffic-hover */
+  windowcontrols > button > image {
+    background-color: rgba($text-primary, 0.12);
+  }
+  windowcontrols > button.close:hover > image {
+    background-color: #{"@ef_red"};
+    color: #232a2e;
+  }
+  windowcontrols > button.minimize:hover > image {
+    background-color: #{"@ef_yellow"};
+    color: #232a2e;
+  }
+  windowcontrols > button.maximize:hover > image {
+    background-color: #{"@ef_green"};
+    color: #232a2e;
+  }
+}
+
+/* Estado activo (click) */
+windowcontrols > button.close:active > image {
+  background-color: #cd6769;
+  color: #232a2e;
+}
+
+windowcontrols > button.minimize:active > image {
+  background-color: #c2a366;
+  color: #232a2e;
+}
+
+windowcontrols > button.maximize:active > image {
+  background-color: #8fa869;
+  color: #232a2e;
+}
+
+/* Switches & Toggles */
+switch:checked {
+  background-color: #{"@ef_green"}; /* Forest Green */
+  color: #232a2e;
+}
+
+/* Checkbuttons & Radios */
+checkbutton:checked > check,
+checkbutton:checked > radio {
+  background-color: #{"@ef_green"};
+  color: #232a2e;
+  border-color: #{"@ef_green"};
+}
+
+/* Barras de progreso y niveles */
+progressbar > trough > progress {
+  background-color: #{"@ef_green"}; /* Forest Green */
+}
+
+levelbar > trough > block.filled {
+  background-color: #{"@ef_green"};
+}
+
+levelbar > trough > block.low {
+  background-color: #{"@ef_yellow"}; /* Muted Yellow */
+}
+
+levelbar > trough > block.high {
+  background-color: #{"@ef_green"};
+}
+
+levelbar > trough > block.full {
+  background-color: #{"@ef_aqua"}; /* Aqua/Sage */
+}
+
+/* Sliders y escalas */
+scale > highlight {
+  background-color: #{"@ef_green"};
+}
+
+scale > marks > mark {
+  color: #{"@ef_fg_muted"};
+}
+
+/* Scrollbars */
+scrollbar > range > trough > slider:hover {
+  background-color: #{"@ef_green"};
+}
+
+scrollbar > range > trough > slider:active {
+  background-color: #{"@ef_aqua"};
+}
+
+/* Badges, Chips y Clases Semánticas */
+.numeric, .badge.numeric {
+  background-color: #{"@ef_orange"}; /* Terracotta #e69875 */
+  color: #232a2e;
+  font-weight: bold;
+}
+
+.badge {
+  background-color: #{"@ef_bg3"};
+  color: #{"@ef_fg"};
+}
+
+.badge.accent, .accent.badge {
+  background-color: #{"@ef_green"}; /* Forest Green */
+  color: #232a2e;
+}
+
+.badge.info, .info.badge {
+  background-color: #{"@ef_blue"}; /* Slate Blue */
+  color: #232a2e;
+}
+
+.badge.warning, .warning.badge {
+  background-color: #{"@ef_yellow"}; /* Muted Yellow */
+  color: #232a2e;
+}
+
+.badge.error, .error.badge {
+  background-color: #{"@ef_red"}; /* Warm Red */
+  color: #232a2e;
+}
+
+.badge.success, .success.badge {
+  background-color: #{"@ef_aqua"}; /* Aqua/Sage */
+  color: #232a2e;
+}
+
+.badge.terracotta, .badge.orange, .orange.badge {
+  background-color: #{"@ef_orange"}; /* Terracotta */
+  color: #232a2e;
+}
+
+.badge.lavender, .badge.purple, .purple.badge {
+  background-color: #{"@ef_purple"}; /* Lavender */
+  color: #232a2e;
+}
+
+.badge.cream, .cream.badge {
+  background-color: #{"@ef_cream"}; /* Tonos crema */
+  color: #232a2e;
+}
+
+.badge.muted, .badge.gray, .gray.badge {
+  background-color: #{"@ef_gray_muted"}; /* Gris apagado */
+  color: #232a2e;
+}
+
+/* ===================================================================
+ * SECCIÓN 5: GEOMETRÍA Y MÉTRICAS DINÁMICAS
+ * =================================================================== */
+window.background:not(.popup), window.csd:not(.popup), window.solid-csd, .window-frame, dialog {
+  border-radius: #{$window-radius}px;
+}
+
+window.maximized, window.fullscreen,
+window.maximized > .background, window.fullscreen > .background,
+window.maximized.csd, window.fullscreen.csd {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+button, .button, entry, .entry, dropdown > button {
+  border-radius: #{$button-radius}px;
+}
+
+button, entry, .card {
+  border-width: #{$border-width}px;
+}

@@ -1,0 +1,30 @@
+/* Everforest Pad OSD for GNOME Shell 51 */
+.Leader {
+    stroke-width: .5 !important;
+    stroke: #475258;
+    fill: none !important;
+}
+
+.Button {
+    stroke-width: .25;
+    stroke: #a7c080;
+    fill: #343f44;
+}
+
+.Ring {
+    stroke-width: .5 !important;
+    stroke: #475258 !important;
+    fill: none !important;
+}
+
+.Label {
+    stroke: none !important;
+    stroke-width: .1 !important;
+    fill: transparent !important;
+}
+
+.TouchStrip, .TouchRing {
+    stroke-width: .1 !important;
+    stroke: #a7c080 !important;
+    fill: #343f44 !important;
+}
