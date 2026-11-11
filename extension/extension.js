@@ -65,8 +65,8 @@ class QuickThemerToggle extends QuickSettings.QuickMenuToggle {
         this._menuItems = new Map();
         this._activePresetName = null;
 
-        // Submenu header
-        this.menu.setHeader('preferences-desktop-theme-symbolic', 'GNOME Quick Themer');
+        // Submenu header (matches native GNOME Shell submenus like Network and Bluetooth)
+        this.menu.setHeader('preferences-desktop-theme-symbolic', _('Tema de Interfaz'));
         this._setupHeaderButtons();
 
         // Preset list container section (scrollable)
@@ -215,55 +215,34 @@ class QuickThemerToggle extends QuickSettings.QuickMenuToggle {
     }
 
     /**
-     * Adds quick action icon buttons to the submenu header (Reset & Settings).
+     * Adds the single standard GNOME Settings gear icon to the submenu header.
      */
     _setupHeaderButtons() {
-        const header = this.menu._header;
-        if (!header) return;
-
-        // Reset to Adwaita default button
-        const resetBtn = new St.Button({
-            style_class: 'button icon-button quick-themer-header-btn',
-            child: new St.Icon({
-                icon_name: 'edit-undo-symbolic',
-                style_class: 'popup-menu-icon',
-            }),
-            can_focus: true,
-            y_align: Clutter.ActorAlign.CENTER,
-            accessible_name: _('Restablecer a Adwaita'),
-        });
-        resetBtn.connect('clicked', () => {
-            this._resetToDefault();
-        });
-
-        // Settings / Preferences Studio button
         const settingsBtn = new St.Button({
-            style_class: 'button icon-button quick-themer-header-btn',
+            style_class: 'button icon-button',
             child: new St.Icon({
                 icon_name: 'emblem-system-symbolic',
                 style_class: 'popup-menu-icon',
             }),
             can_focus: true,
             y_align: Clutter.ActorAlign.CENTER,
-            accessible_name: _('Studio de Personalización'),
+            accessible_name: _('Ajustes de Tema'),
         });
         settingsBtn.connect('clicked', () => {
             this.menu.close();
             this._extension.openPreferences();
         });
 
-        // Attach buttons cleanly to the header layout
-        const headerLayout = header.layout_manager;
-        if (headerLayout && this.menu._headerSpacer) {
-            const side = this.menu.actor.text_direction === Clutter.TextDirection.RTL
-                ? Clutter.GridPosition.LEFT
-                : Clutter.GridPosition.RIGHT;
-
-            headerLayout.attach_next_to(resetBtn, this.menu._headerSpacer, side, 1, 1);
-            headerLayout.attach_next_to(settingsBtn, resetBtn, side, 1, 1);
-        } else if (typeof this.menu.addHeaderSuffix === 'function') {
-            this.menu.addHeaderSuffix(resetBtn);
+        if (typeof this.menu.addHeaderSuffix === 'function') {
             this.menu.addHeaderSuffix(settingsBtn);
+        } else if (this.menu._header) {
+            const headerLayout = this.menu._header.layout_manager;
+            if (headerLayout && this.menu._headerSpacer) {
+                const side = this.menu.actor.text_direction === Clutter.TextDirection.RTL
+                    ? Clutter.GridPosition.LEFT
+                    : Clutter.GridPosition.RIGHT;
+                headerLayout.attach_next_to(settingsBtn, this.menu._headerSpacer, side, 1, 1);
+            }
         }
     }
 
@@ -305,7 +284,7 @@ class QuickThemerToggle extends QuickSettings.QuickMenuToggle {
     }
 
     /**
-     * Creates and attaches a single preset menu item with live visual color swatches.
+     * Creates and attaches a single preset menu item with a sleek native accent dot.
      */
     _addPresetMenuItem(name, container) {
         const cfg = this._presets[name] || {};
@@ -316,42 +295,22 @@ class QuickThemerToggle extends QuickSettings.QuickMenuToggle {
             style_class: 'quick-themer-preset-item',
         });
 
-        // Ensure the label expands to fill space so theme names and swatches remain perfectly aligned
         if (item.label) {
             item.label.x_expand = true;
             item.label.x_align = Clutter.ActorAlign.START;
         }
 
-        // Add visual color swatch dots (window_bg and accent_color)
-        const bgHex = cfg.window_bg || '#2d353b';
-        const accentHex = cfg.accent_color || '#a7c080';
-
-        const swatchBox = new St.BoxLayout({
-            style_class: 'quick-themer-swatch-box',
-            x_align: Clutter.ActorAlign.END,
-            y_align: Clutter.ActorAlign.CENTER,
+        const accentHex = cfg.accent_color || '#3584e4';
+        const dot = new St.Widget({
+            style_class: 'quick-themer-accent-dot',
+            style: `background-color: ${accentHex};`,
         });
 
-        const bgDot = new St.Widget({
-            style_class: 'quick-themer-dot',
-            style: `background-color: ${bgHex}; border: 1px solid rgba(255,255,255,0.25);`,
-        });
-
-        const accentDot = new St.Widget({
-            style_class: 'quick-themer-dot',
-            style: `background-color: ${accentHex}; box-shadow: 0 0 3px ${accentHex};`,
-        });
-
-        swatchBox.add_child(bgDot);
-        swatchBox.add_child(accentDot);
-
-        // In GNOME 45+, PopupBaseMenuItem has _ornamentIcon (not _ornamentLabel).
-        // Inserting swatchBox below _ornamentIcon places it immediately to the left of the ornament.
         const ornament = item._ornamentIcon || item._ornamentLabel;
         if (ornament) {
-            item.insert_child_below(swatchBox, ornament);
+            item.insert_child_below(dot, ornament);
         } else {
-            item.add_child(swatchBox);
+            item.add_child(dot);
         }
 
         item.connect('activate', () => {
@@ -363,22 +322,22 @@ class QuickThemerToggle extends QuickSettings.QuickMenuToggle {
     }
 
     /**
-     * Rebuilds utility action items.
+     * Rebuilds utility action items conforming to GNOME Shell submenu HIG.
      */
     _rebuildActionsMenu() {
         this._actionsSection.removeAll();
         this._actionsSection.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        // Action: Studio de Personalización (Preferences)
-        const studioItem = new PopupMenu.PopupImageMenuItem(
-            _('Studio de Personalización...'),
-            'preferences-system-windows-symbolic'
+        // Action: Preferences Studio
+        const prefsItem = new PopupMenu.PopupImageMenuItem(
+            _('Ajustes de Tema...'),
+            'emblem-system-symbolic'
         );
-        studioItem.connect('activate', () => {
+        prefsItem.connect('activate', () => {
             this.menu.close();
             this._extension.openPreferences();
         });
-        this._actionsSection.addMenuItem(studioItem);
+        this._actionsSection.addMenuItem(prefsItem);
 
         // Action: Reset GNOME desktop to Adwaita
         const resetItem = new PopupMenu.PopupImageMenuItem(

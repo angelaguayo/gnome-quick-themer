@@ -2,13 +2,11 @@
  * GNOME Quick Themer — Libadwaita Preferences Studio (prefs.js)
  * Compatible with GNOME Shell 45–51+ (ESM architecture)
  *
- * Full-featured Libadwaita Desktop Studio:
- * - Catálogo completo de temas con previsualización, favoritos y filtros
- * - Creador y Editor visual de Presets con selectores de color nativos (Gtk.ColorDialogButton)
- * - Control de parámetros de bordes, esquinas y disposición de botones (Izquierda/Derecha)
- * - Métricas del sistema en tiempo real y hot-reload
- * - Integraciones de Ecosistema: Fondos 4K SVG, Firefox, Flatpaks
- * - Diagnóstico del sistema y restauración de fábrica
+ * Designed strictly following GNOME Human Interface Guidelines (HIG):
+ * - Catálogo limpio con gestión de favoritos y prueba directa
+ * - Diseñador intuitivo: 4 colores esenciales + expander avanzado + parámetros de ventanas/botones
+ * - Sin redundancias ni duplicación de métricas
+ * - Integraciones del sistema y restauración de fábrica
  */
 
 import Adw from 'gi://Adw';
@@ -96,7 +94,7 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
     }
 
     /**
-     * Saves user presets map to ~/.config/gnome-quick-themer/custom_presets.json
+     * Saves user presets map.
      */
     _saveUserPresets(userPresets) {
         const configDir = GLib.build_filenamev([GLib.get_home_dir(), '.config', 'gnome-quick-themer']);
@@ -130,7 +128,7 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
     }
 
     /**
-     * Executes quick-themer asynchronously without blocking the UI.
+     * Executes quick-themer asynchronously without blocking Mutter compositor loop.
      */
     _executeQuickThemer(args, onDone) {
         const projectDir = this._findProjectDir();
@@ -177,7 +175,6 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
             placeholder_text: '#000000',
         });
 
-        // Use modern Gtk.ColorDialogButton with fallback to Gtk.ColorButton
         let colorBtn;
         let isModern = (typeof Gtk.ColorDialogButton !== 'undefined');
 
@@ -285,39 +282,47 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
      */
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
-        window.set_default_size(820, 840);
+        window.set_default_size(780, 800);
 
         let presets = this._loadPresets();
         let userPresets = this._loadUserPresets();
         let presetNames = Object.keys(presets).sort();
 
+        // Forward declaration for loading a preset into the Designer
+        let loadPresetIntoDesigner = null;
+
         // =====================================================================
-        // PAGE 1: CATÁLOGO Y FAVORITOS
+        // PÁGINA 1: CATÁLOGO DE TEMAS
         // =====================================================================
-        const pageQuick = new Adw.PreferencesPage({
+        const pageCatalog = new Adw.PreferencesPage({
             title: _('Catálogo'),
-            icon_name: 'starred-symbolic',
+            icon_name: 'view-grid-symbolic',
             name: 'catalog',
         });
-        window.add(pageQuick);
+        window.add(pageCatalog);
 
         // Grupo 1: Favoritos en Quick Settings
-        const groupFavs = new Adw.PreferencesGroup({
-            title: _('Presets en Quick Settings'),
-            description: _('Elige los 5 temas que aparecerán directamente en el panel superior para un acceso en 1 clic.'),
+        const groupQuickSettings = new Adw.PreferencesGroup({
+            title: _('Panel Superior (Quick Settings)'),
+            description: _('Configura cómo se muestran los temas en el menú superior.'),
         });
-        pageQuick.add(groupFavs);
+        pageCatalog.add(groupQuickSettings);
 
         const onlyFavRow = new Adw.SwitchRow({
-            title: _('Modo compacto (Solo mostrar los 5 favoritos)'),
-            subtitle: _('Mantiene el menú desplegable liviano y limpio de scroll largo.'),
+            title: _('Modo compacto (Solo mostrar 5 favoritos)'),
+            subtitle: _('Mantiene el menú desplegable ligero y sin desplazamiento largo.'),
         });
         settings.bind('show-only-favorites', onlyFavRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-        groupFavs.add(onlyFavRow);
+        groupQuickSettings.add(onlyFavRow);
+
+        // Expander para no agobiar con 5 dropdowns de golpe
+        const favsExpander = new Adw.ExpanderRow({
+            title: _('Elegir los 5 temas favoritos'),
+            subtitle: _('Personaliza las 5 posiciones del acceso rápido'),
+        });
+        groupQuickSettings.add(favsExpander);
 
         const defaultFavs = ['Everforest Dark', 'Catppuccin Mocha', 'Tokyo Night', 'Nord Dark', 'Gruvbox Dark'];
-        const favComboRows = [];
-
         for (let i = 1; i <= 5; i++) {
             const key = `favorite-preset-${i}`;
             const strList = new Gtk.StringList();
@@ -326,8 +331,7 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
             }
 
             const comboRow = new Adw.ComboRow({
-                title: _(`Favorito ${i}`),
-                subtitle: _(`Posición ${i} en el menú de acceso rápido`),
+                title: _(`Posición ${i}`),
                 model: strList,
             });
 
@@ -342,29 +346,23 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
                 }
             });
 
-            groupFavs.add(comboRow);
-            favComboRows.push(comboRow);
+            favsExpander.add_row(comboRow);
         }
 
-        // Grupo 2: Explorador y Acciones Directas de Presets
-        const groupCatalog = new Adw.PreferencesGroup({
-            title: _('Explorador de Temas Calibrados'),
-            description: _('Prueba, edita o elimina presets. Los temas personalizados pueden gestionarse con total libertad.'),
+        // Grupo 2: Biblioteca de Temas
+        const groupThemes = new Adw.PreferencesGroup({
+            title: _('Biblioteca de Temas'),
+            description: _('Aplica cualquier tema con un clic o cárgalo en el diseñador para personalizarlo.'),
         });
-        pageQuick.add(groupCatalog);
+        pageCatalog.add(groupThemes);
 
-        // Container box for dynamic catalog rows
         const catalogBox = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
             spacing: 0,
         });
-        groupCatalog.add(catalogBox);
+        groupThemes.add(catalogBox);
 
-        // Forward declaration for editor setters (populated in Page 2)
-        let editorLoadPreset = null;
-
-        const rebuildCatalogList = () => {
-            // Remove previous rows
+        const rebuildCatalog = () => {
             let child = catalogBox.get_first_child();
             while (child) {
                 const next = child.get_next_sibling();
@@ -381,67 +379,49 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
                 const isDark = (cfg.color_scheme === 'dark');
                 const isCustom = Boolean(userPresets[name]);
 
-                const subtitleText = `${isDark ? '🌙 Oscuro' : '☀️ Claro'} • Acento: ${cfg.accent_color || '#a7c080'} • Ventana: ${cfg.window_bg || '#2d353b'}${isCustom ? ' • [Personalizado]' : ''}`;
-
                 const row = new Adw.ActionRow({
                     title: name,
-                    subtitle: subtitleText,
+                    subtitle: `${isDark ? '🌙 Oscuro' : '☀️ Claro'} • Acento: ${cfg.accent_color || '#3584e4'}${isCustom ? ' • [Personalizado]' : ''}`,
                 });
 
-                // Color swatch dots preview
-                const swatchBox = new Gtk.Box({
-                    orientation: Gtk.Orientation.HORIZONTAL,
-                    spacing: 4,
-                    valign: Gtk.Align.CENTER,
-                    margin_end: 8,
-                });
+                // Accent dot prefix
+                const dot = new Gtk.Box({ valign: Gtk.Align.CENTER });
+                dot.set_size_request(14, 14);
+                dot.set_css_classes(['circular']);
+                dot.set_tooltip_text(`Acento: ${cfg.accent_color || ''}`);
+                row.add_prefix(dot);
 
-                const makeDot = (colorHex, tooltip) => {
-                    const dot = new Gtk.Box({
-                        valign: Gtk.Align.CENTER,
-                    });
-                    dot.set_size_request(16, 16);
-                    dot.set_css_classes(['circular']);
-                    dot.set_tooltip_text(tooltip);
-                    return dot;
-                };
-
-                // Add dot indicators
-                swatchBox.append(makeDot(cfg.accent_color || '#a7c080', `Acento: ${cfg.accent_color || ''}`));
-                swatchBox.append(makeDot(cfg.window_bg || '#2d353b', `Fondo: ${cfg.window_bg || ''}`));
-                row.add_prefix(swatchBox);
-
-                // Button: Editar en Studio
+                // Edit button
                 const editBtn = new Gtk.Button({
                     icon_name: 'document-edit-symbolic',
                     valign: Gtk.Align.CENTER,
-                    tooltip_text: _('Cargar y editar en el Studio de Paleta'),
+                    tooltip_text: _('Cargar en el Diseñador'),
                     css_classes: ['flat'],
                 });
                 editBtn.connect('clicked', () => {
-                    if (editorLoadPreset) {
-                        editorLoadPreset(name, cfg);
-                        window.set_visible_page(pageEditor);
+                    if (loadPresetIntoDesigner) {
+                        loadPresetIntoDesigner(name, cfg);
+                        window.set_visible_page(pageDesigner);
                     }
                 });
                 row.add_suffix(editBtn);
 
-                // Button: Eliminar (solo para presets del usuario)
+                // Delete button for custom presets only
                 if (isCustom) {
                     const deleteBtn = new Gtk.Button({
                         icon_name: 'user-trash-symbolic',
                         valign: Gtk.Align.CENTER,
-                        tooltip_text: _('Eliminar este preset personalizado'),
+                        tooltip_text: _('Eliminar preset'),
                         css_classes: ['flat', 'destructive-action'],
                     });
                     deleteBtn.connect('clicked', () => {
                         this._deleteUserPreset(name);
-                        rebuildCatalogList();
+                        rebuildCatalog();
                     });
                     row.add_suffix(deleteBtn);
                 }
 
-                // Button: Aplicar
+                // Apply button
                 const applyBtn = new Gtk.Button({
                     label: _('Aplicar'),
                     valign: Gtk.Align.CENTER,
@@ -466,40 +446,40 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
             }
         };
 
-        rebuildCatalogList();
+        rebuildCatalog();
 
         // =====================================================================
-        // PAGE 2: STUDIO Y CREADOR DE PRESETS
+        // PÁGINA 2: DISEÑADOR DE TEMA (CLARO, DIRECTO Y SIN AGOBIO)
         // =====================================================================
-        const pageEditor = new Adw.PreferencesPage({
-            title: _('Studio de Paleta'),
+        const pageDesigner = new Adw.PreferencesPage({
+            title: _('Diseñador'),
             icon_name: 'applications-graphics-symbolic',
-            name: 'editor',
+            name: 'designer',
         });
-        window.add(pageEditor);
+        window.add(pageDesigner);
 
-        const groupBase = new Adw.PreferencesGroup({
-            title: _('Plantilla y Nombre del Preset'),
-            description: _('Comienza desde una paleta existente o diseña tu armonía visual desde cero.'),
+        // 1. Identidad
+        const groupIdentity = new Adw.PreferencesGroup({
+            title: _('Identidad del Tema'),
         });
-        pageEditor.add(groupBase);
+        pageDesigner.add(groupIdentity);
 
         const basePresetModel = new Gtk.StringList();
         for (const name of presetNames) {
             basePresetModel.append(name);
         }
         const basePresetCombo = new Adw.ComboRow({
-            title: _('Cargar plantilla base'),
-            subtitle: _('Usa los colores y métricas de un tema como punto de partida'),
+            title: _('Cargar desde plantilla'),
+            subtitle: _('Usa los colores y parámetros de un tema existente'),
             model: basePresetModel,
         });
-        groupBase.add(basePresetCombo);
+        groupIdentity.add(basePresetCombo);
 
         const themeNameEntry = new Adw.EntryRow({
             title: _('Nombre del tema'),
-            text: 'Mi-Tema-Studio',
+            text: 'Mi-Tema',
         });
-        groupBase.add(themeNameEntry);
+        groupIdentity.add(themeNameEntry);
 
         const schemeModel = new Gtk.StringList();
         schemeModel.append(_('Oscuro (Dark)'));
@@ -509,68 +489,117 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
             model: schemeModel,
             selected: 0,
         });
-        groupBase.add(schemeCombo);
+        groupIdentity.add(schemeCombo);
 
-        // Grupo: Colores Fáciles e Intuitivos con Selector Visual
-        const groupColors = new Adw.PreferencesGroup({
-            title: _('Colores de la Paleta'),
-            description: _('Haz clic en el selector de color nativo para elegir visualmente o introduce el código #HEX.'),
+        // 2. Colores Esenciales (Solo los 4 colores fundamentales)
+        const groupEssentialColors = new Adw.PreferencesGroup({
+            title: _('Colores Esenciales'),
+            description: _('Los 4 tonos que definen la personalidad visual de tu escritorio.'),
         });
-        pageEditor.add(groupColors);
+        pageDesigner.add(groupEssentialColors);
 
-        const colorAccent = this._createColorRow(_('Color de Acento Principal'), _('Botones destacados, switches y foco'), '#a7c080');
-        const colorAccentFg = this._createColorRow(_('Texto sobre el Acento'), _('Contraste sobre fondo de acento'), '#1a201c');
-        const colorAccentSec = this._createColorRow(_('Acento Secundario'), _('Hover activo, acentos sutiles y enlaces'), '#83c092');
-        const colorWindowBg = this._createColorRow(_('Fondo de Ventana (Window BG)'), _('Fondo principal de aplicaciones'), '#2d353b');
-        const colorSidebarBg = this._createColorRow(_('Barra Lateral (Sidebar)'), _('Paneles en Nautilus y apps split-view'), '#272e33');
-        const colorHeaderbarBg = this._createColorRow(_('Barra de Título (Headerbar)'), _('Barra superior de ventanas'), '#232a2e');
-        const colorSurfaceElevated = this._createColorRow(_('Superficie Elevada'), _('Tarjetas, diálogos y popups'), '#343f44');
-        const colorTextPrimary = this._createColorRow(_('Texto Principal (Foreground)'), _('Texto principal legible'), '#d3c6aa');
-        const colorTextMuted = this._createColorRow(_('Texto Secundario (Muted)'), _('Subtítulos y metadatos'), '#859289');
-        const colorBorder = this._createColorRow(_('Color de Bordes'), _('Líneas divisorias y contornos'), '#3d484d');
-        const colorBorderActive = this._createColorRow(_('Borde Activo / Foco'), _('Contorno de ventana enfocada'), '#475258');
+        const colorAccent = this._createColorRow(
+            _('Color de Acento'),
+            _('Botones destacados, selección y controles activos'),
+            '#a7c080'
+        );
+        const colorWindowBg = this._createColorRow(
+            _('Fondo de Ventana'),
+            _('Tono principal de las ventanas y aplicaciones'),
+            '#2d353b'
+        );
+        const colorBarsBg = this._createColorRow(
+            _('Barras y Paneles'),
+            _('Barra superior Headerbar y barra lateral de Nautilus'),
+            '#232a2e'
+        );
+        const colorText = this._createColorRow(
+            _('Color del Texto'),
+            _('Texto principal de lectura en primer plano'),
+            '#d3c6aa'
+        );
 
-        groupColors.add(colorAccent.row);
-        groupColors.add(colorAccentFg.row);
-        groupColors.add(colorAccentSec.row);
-        groupColors.add(colorWindowBg.row);
-        groupColors.add(colorSidebarBg.row);
-        groupColors.add(colorHeaderbarBg.row);
-        groupColors.add(colorSurfaceElevated.row);
-        groupColors.add(colorTextPrimary.row);
-        groupColors.add(colorTextMuted.row);
-        groupColors.add(colorBorder.row);
-        groupColors.add(colorBorderActive.row);
+        groupEssentialColors.add(colorAccent.row);
+        groupEssentialColors.add(colorWindowBg.row);
+        groupEssentialColors.add(colorBarsBg.row);
+        groupEssentialColors.add(colorText.row);
 
-        // Grupo: Geometría, Ventanas y Bordes del Preset
-        const groupPresetGeometry = new Adw.PreferencesGroup({
-            title: _('Geometría, Ventanas y Bordes'),
-            description: _('Parámetros de esquinas redondeadas, grosor de contorno y ubicación de botones.'),
+        // 3. Ajustes Avanzados de Color (Colapsado para evitar saturación)
+        const groupAdvancedColors = new Adw.PreferencesGroup();
+        pageDesigner.add(groupAdvancedColors);
+
+        const advancedExpander = new Adw.ExpanderRow({
+            title: _('Ajustes Avanzados de Color'),
+            subtitle: _('Contraste sobre acento, tarjetas elevadas y bordes'),
         });
-        pageEditor.add(groupPresetGeometry);
+        groupAdvancedColors.add(advancedExpander);
+
+        const colorAccentFg = this._createColorRow(
+            _('Texto sobre el Acento'),
+            _('Contraste dentro de botones activos'),
+            '#1a201c'
+        );
+        const colorAccentSec = this._createColorRow(
+            _('Acento Secundario'),
+            _('Enlaces y efectos de selección'),
+            '#83c092'
+        );
+        const colorSurface = this._createColorRow(
+            _('Superficie Elevada'),
+            _('Tarjetas, menús y diálogos flotantes'),
+            '#343f44'
+        );
+        const colorTextMuted = this._createColorRow(
+            _('Texto Secundario'),
+            _('Subtítulos y etiquetas atenuadas'),
+            '#859289'
+        );
+        const colorBorder = this._createColorRow(
+            _('Color de Borde'),
+            _('Contorno sutil de ventanas y contenedores'),
+            '#3d484d'
+        );
+        const colorBorderActive = this._createColorRow(
+            _('Borde Enfocado'),
+            _('Resaltado de la ventana activa'),
+            '#475258'
+        );
+
+        advancedExpander.add_row(colorAccentFg.row);
+        advancedExpander.add_row(colorAccentSec.row);
+        advancedExpander.add_row(colorSurface.row);
+        advancedExpander.add_row(colorTextMuted.row);
+        advancedExpander.add_row(colorBorder.row);
+        advancedExpander.add_row(colorBorderActive.row);
+
+        // 4. Geometría de Ventanas y Botones (Sin duplicados con otra página)
+        const groupGeometry = new Adw.PreferencesGroup({
+            title: _('Ventanas, Bordes y Botones'),
+            description: _('Controla el redondeo de esquinas y la ubicación de los botones de ventana.'),
+        });
+        pageDesigner.add(groupGeometry);
 
         const winRadiusRow = new Adw.SpinRow({
             title: _('Radio de esquinas de ventana'),
-            subtitle: _('Redondeo superior e inferior en píxeles (0 = cuadrado, 32 = curvado)'),
+            subtitle: _('0 px (cuadrado) a 32 px (ultra redondeado)'),
             adjustment: new Gtk.Adjustment({ lower: 0, upper: 32, step_increment: 1, page_increment: 4, value: 12 }),
         });
-        groupPresetGeometry.add(winRadiusRow);
+        groupGeometry.add(winRadiusRow);
 
         const btnRadiusRow = new Adw.SpinRow({
-            title: _('Radio de bordes de botones'),
-            subtitle: _('Redondeo de botones, inputs y selectores (0 a 24 px)'),
+            title: _('Radio de botones e inputs'),
+            subtitle: _('Redondeo de botones y controles interactivos (0 a 24 px)'),
             adjustment: new Gtk.Adjustment({ lower: 0, upper: 24, step_increment: 1, page_increment: 2, value: 8 }),
         });
-        groupPresetGeometry.add(btnRadiusRow);
+        groupGeometry.add(btnRadiusRow);
 
         const borderWidthRow = new Adw.SpinRow({
-            title: _('Grosor de borde de ventana y tarjetas'),
-            subtitle: _('Anchura de contornos en píxeles (0 = sin bordes, 1 = sutil, 3 = marcado)'),
+            title: _('Grosor de borde de ventana'),
+            subtitle: _('0 px (sin contorno) a 4 px (borde marcado)'),
             adjustment: new Gtk.Adjustment({ lower: 0, upper: 4, step_increment: 1, page_increment: 1, value: 1 }),
         });
-        groupPresetGeometry.add(borderWidthRow);
+        groupGeometry.add(borderWidthRow);
 
-        // Disposición de botones (Derecha vs Izquierda vs Compacto)
         const layoutModel = new Gtk.StringList();
         layoutModel.append(_('Derecha (GNOME / Windows: Minimizar, Maximizar, Cerrar)'));
         layoutModel.append(_('Izquierda (macOS: Cerrar, Minimizar, Maximizar)'));
@@ -580,54 +609,44 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
         const layoutValues = ['right', 'left', 'right-compact', 'left-compact'];
         const buttonLayoutCombo = new Adw.ComboRow({
             title: _('Disposición de botones de ventana'),
-            subtitle: _('Ubicación de los controles de cerrar, minimizar y maximizar'),
+            subtitle: _('Ubicación de controles en la barra de título'),
             model: layoutModel,
             selected: 0,
         });
-        groupPresetGeometry.add(buttonLayoutCombo);
+        groupGeometry.add(buttonLayoutCombo);
 
         const controlStyleModel = new Gtk.StringList();
         controlStyleModel.append(_('macOS Traffic Lights (Semáforo con hover inteligente)'));
         controlStyleModel.append(_('Adwaita Estándar (Monocromático discreto)'));
 
         const controlsStyleCombo = new Adw.ComboRow({
-            title: _('Estilo de botones de control'),
+            title: _('Estilo de controles de ventana'),
             model: controlStyleModel,
             selected: 0,
         });
-        groupPresetGeometry.add(controlsStyleCombo);
+        groupGeometry.add(controlsStyleCombo);
 
-        const wpStyles = ['abstract_waves', 'aurora', 'geometric'];
-        const wpStyleModel = new Gtk.StringList();
-        wpStyleModel.append(_('Olas Abstractas (Waves)'));
-        wpStyleModel.append(_('Aurora Boreal'));
-        wpStyleModel.append(_('Geométrico Cristalino'));
-
-        const wpStyleCombo = new Adw.ComboRow({
-            title: _('Estilo de fondo de pantalla coordinado'),
-            model: wpStyleModel,
-            selected: 0,
-        });
-        groupPresetGeometry.add(wpStyleCombo);
-
-        // Preload function for base preset template selection or direct catalog editing
-        editorLoadPreset = (name, cfg) => {
+        // Preload function
+        loadPresetIntoDesigner = (name, cfg) => {
             if (!cfg) return;
             themeNameEntry.set_text(name.includes('Custom') ? name : `${name}-Custom`);
             schemeCombo.set_selected(cfg.color_scheme === 'light' ? 1 : 0);
 
+            // Essential colors
             if (cfg.accent_color) colorAccent.setHex(cfg.accent_color);
+            if (cfg.window_bg) colorWindowBg.setHex(cfg.window_bg);
+            if (cfg.headerbar_bg) colorBarsBg.setHex(cfg.headerbar_bg);
+            if (cfg.text_primary) colorText.setHex(cfg.text_primary);
+
+            // Advanced colors
             if (cfg.accent_fg) colorAccentFg.setHex(cfg.accent_fg);
             if (cfg.accent_secondary) colorAccentSec.setHex(cfg.accent_secondary);
-            if (cfg.window_bg) colorWindowBg.setHex(cfg.window_bg);
-            if (cfg.sidebar_bg) colorSidebarBg.setHex(cfg.sidebar_bg);
-            if (cfg.headerbar_bg) colorHeaderbarBg.setHex(cfg.headerbar_bg);
-            if (cfg.surface_elevated) colorSurfaceElevated.setHex(cfg.surface_elevated);
-            if (cfg.text_primary) colorTextPrimary.setHex(cfg.text_primary);
+            if (cfg.surface_elevated) colorSurface.setHex(cfg.surface_elevated);
             if (cfg.text_muted) colorTextMuted.setHex(cfg.text_muted);
             if (cfg.border_color) colorBorder.setHex(cfg.border_color);
             if (cfg.border_active) colorBorderActive.setHex(cfg.border_active);
 
+            // Geometry
             if (typeof cfg.window_radius === 'number') winRadiusRow.set_value(cfg.window_radius);
             if (typeof cfg.button_radius === 'number') btnRadiusRow.set_value(cfg.button_radius);
             if (typeof cfg.border_width === 'number') borderWidthRow.set_value(cfg.border_width);
@@ -640,28 +659,23 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
             if (cfg.window_controls_style) {
                 controlsStyleCombo.set_selected(cfg.window_controls_style === 'adwaita' ? 1 : 0);
             }
-
-            if (cfg.wallpaper_style) {
-                const wIdx = wpStyles.indexOf(cfg.wallpaper_style);
-                if (wIdx >= 0) wpStyleCombo.set_selected(wIdx);
-            }
         };
 
         basePresetCombo.connect('notify::selected', () => {
             const baseName = presetNames[basePresetCombo.selected];
-            editorLoadPreset(baseName, presets[baseName]);
+            loadPresetIntoDesigner(baseName, presets[baseName]);
         });
 
-        // Grupo Guardar Preset y Aplicar
-        const groupSave = new Adw.PreferencesGroup({
-            title: _('Acciones del Preset'),
+        // 5. Botones de Acción
+        const groupActions = new Adw.PreferencesGroup({
+            title: _('Acciones'),
         });
-        pageEditor.add(groupSave);
+        pageDesigner.add(groupActions);
 
         const buildPresetConfig = () => {
             const chosenLayout = layoutValues[buttonLayoutCombo.selected] || 'right';
             const chosenControls = controlsStyleCombo.selected === 1 ? 'adwaita' : 'traffic-hover';
-            const chosenWp = wpStyles[wpStyleCombo.selected] || 'abstract_waves';
+            const barsColor = colorBarsBg.getHex() || '#232a2e';
 
             return {
                 theme_name: themeNameEntry.get_text() || 'Custom-Theme',
@@ -670,10 +684,10 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
                 accent_fg: colorAccentFg.getHex() || '#1a201c',
                 accent_secondary: colorAccentSec.getHex() || '#83c092',
                 window_bg: colorWindowBg.getHex() || '#2d353b',
-                sidebar_bg: colorSidebarBg.getHex() || '#272e33',
-                surface_elevated: colorSurfaceElevated.getHex() || '#343f44',
-                headerbar_bg: colorHeaderbarBg.getHex() || '#232a2e',
-                text_primary: colorTextPrimary.getHex() || '#d3c6aa',
+                sidebar_bg: barsColor,
+                surface_elevated: colorSurface.getHex() || '#343f44',
+                headerbar_bg: barsColor,
+                text_primary: colorText.getHex() || '#d3c6aa',
                 text_muted: colorTextMuted.getHex() || '#859289',
                 border_color: colorBorder.getHex() || '#3d484d',
                 border_active: colorBorderActive.getHex() || '#475258',
@@ -682,41 +696,33 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
                 border_width: Math.round(borderWidthRow.get_value()),
                 button_layout: chosenLayout,
                 window_controls_style: chosenControls,
-                wallpaper_style: chosenWp,
+                wallpaper_style: settings.get_string('wallpaper-style') || 'abstract_waves',
             };
         };
 
-        const saveActionRow = new Adw.ActionRow({
-            title: _('Guardar en Catálogo'),
-            subtitle: _('Guarda este preset en tu biblioteca personalizada'),
+        const actionRow = new Adw.ActionRow({
+            title: _('Guardar y Aplicar'),
+            subtitle: _('Compila y activa este tema en GNOME Shell y Libadwaita'),
         });
 
-        const saveBtn = new Gtk.Button({
-            label: _('Guardar Preset'),
+        const saveOnlyBtn = new Gtk.Button({
+            label: _('Solo Guardar'),
             valign: Gtk.Align.CENTER,
             css_classes: ['pill'],
         });
 
-        saveBtn.connect('clicked', () => {
+        saveOnlyBtn.connect('clicked', () => {
             const config = buildPresetConfig();
             const allUser = this._loadUserPresets();
             allUser[config.theme_name] = config;
             this._saveUserPresets(allUser);
 
-            saveBtn.set_label(_('¡Guardado!'));
-            rebuildCatalogList();
+            saveOnlyBtn.set_label(_('¡Guardado!'));
+            rebuildCatalog();
             GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
-                saveBtn.set_label(_('Guardar Preset'));
+                saveOnlyBtn.set_label(_('Solo Guardar'));
                 return GLib.SOURCE_REMOVE;
             });
-        });
-
-        saveActionRow.add_suffix(saveBtn);
-        groupSave.add(saveActionRow);
-
-        const saveAndApplyRow = new Adw.ActionRow({
-            title: _('Guardar y Aplicar al Escritorio'),
-            subtitle: _('Compila las hojas de estilo SCSS con sassc y activa el tema inmediatamente'),
         });
 
         const applySaveBtn = new Gtk.Button({
@@ -734,8 +740,8 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
 
             this._executeQuickThemer(['custom', '--save', '--json', jsonStr], (ok) => {
                 applySaveBtn.set_sensitive(true);
-                applySaveBtn.set_label(ok ? _('¡Aplicado con Éxito!') : _('Error al compilar'));
-                rebuildCatalogList();
+                applySaveBtn.set_label(ok ? _('¡Aplicado!') : _('Error'));
+                rebuildCatalog();
                 GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 3, () => {
                     applySaveBtn.set_label(_('Guardar y Aplicar'));
                     return GLib.SOURCE_REMOVE;
@@ -743,122 +749,47 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
             });
         });
 
-        saveAndApplyRow.add_suffix(applySaveBtn);
-        groupSave.add(saveAndApplyRow);
+        const actionBox = new Gtk.Box({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            spacing: 8,
+            valign: Gtk.Align.CENTER,
+        });
+        actionBox.append(saveOnlyBtn);
+        actionBox.append(applySaveBtn);
+
+        actionRow.add_suffix(actionBox);
+        groupActions.add(actionRow);
 
         // =====================================================================
-        // PAGE 3: MÉTRICAS Y GEOMETRÍA GLOBAL
+        // PÁGINA 3: SISTEMA E INTEGRACIONES (SIN REDUNDANCIAS)
         // =====================================================================
-        const pageMetrics = new Adw.PreferencesPage({
-            title: _('Métricas Globales'),
-            icon_name: 'preferences-system-windows-symbolic',
-            name: 'metrics',
+        const pageSystem = new Adw.PreferencesPage({
+            title: _('Sistema'),
+            icon_name: 'emblem-system-symbolic',
+            name: 'system',
         });
-        window.add(pageMetrics);
+        window.add(pageSystem);
 
-        const groupRadii = new Adw.PreferencesGroup({
-            title: _('Geometría de Ventanas y Controles'),
-            description: _('Ajustes por defecto aplicados al cambiar de tema o compilar.'),
-        });
-        pageMetrics.add(groupRadii);
-
-        const globalWinRadius = new Adw.SpinRow({
-            title: _('Radio de esquinas de ventana'),
-            subtitle: _('Esquinas de ventanas Libadwaita y diálogos (0 a 32 px)'),
-            adjustment: new Gtk.Adjustment({ lower: 0, upper: 32, step_increment: 1, page_increment: 4, value: settings.get_int('window-radius') }),
-        });
-        settings.bind('window-radius', globalWinRadius, 'value', Gio.SettingsBindFlags.DEFAULT);
-        groupRadii.add(globalWinRadius);
-
-        const globalBtnRadius = new Adw.SpinRow({
-            title: _('Radio de botones e inputs'),
-            subtitle: _('Redondeo de botones y controles interactivos (0 a 24 px)'),
-            adjustment: new Gtk.Adjustment({ lower: 0, upper: 24, step_increment: 1, page_increment: 2, value: settings.get_int('button-radius') }),
-        });
-        settings.bind('button-radius', globalBtnRadius, 'value', Gio.SettingsBindFlags.DEFAULT);
-        groupRadii.add(globalBtnRadius);
-
-        const globalBorderWidth = new Adw.SpinRow({
-            title: _('Ancho de bordes en px'),
-            subtitle: _('Grosor del contorno de ventanas y tarjetas (0 a 4 px)'),
-            adjustment: new Gtk.Adjustment({ lower: 0, upper: 4, step_increment: 1, page_increment: 1, value: settings.get_int('border-width') }),
-        });
-        settings.bind('border-width', globalBorderWidth, 'value', Gio.SettingsBindFlags.DEFAULT);
-        groupRadii.add(globalBorderWidth);
-
-        const groupGlobalControls = new Adw.PreferencesGroup({
-            title: _('Controles de Ventana (Titlebar)'),
-        });
-        pageMetrics.add(groupGlobalControls);
-
-        const globalLayoutModel = new Gtk.StringList();
-        globalLayoutModel.append(_('Derecha (GNOME / Windows: Minimizar, Maximizar, Cerrar)'));
-        globalLayoutModel.append(_('Izquierda (macOS: Cerrar, Minimizar, Maximizar)'));
-        globalLayoutModel.append(_('Derecha Compacto (Solo Cerrar)'));
-        globalLayoutModel.append(_('Izquierda Compacto (Solo Cerrar)'));
-
-        const currentLayout = settings.get_string('button-layout') || 'right';
-        let layoutIdx = layoutValues.indexOf(currentLayout);
-        if (layoutIdx < 0) layoutIdx = 0;
-
-        const globalLayoutCombo = new Adw.ComboRow({
-            title: _('Disposición de botones de ventana'),
-            subtitle: _('Ubicación de botones de control en la barra de título'),
-            model: globalLayoutModel,
-            selected: layoutIdx,
-        });
-
-        globalLayoutCombo.connect('notify::selected', () => {
-            const selectedLayout = layoutValues[globalLayoutCombo.selected] || 'right';
-            settings.set_string('button-layout', selectedLayout);
-
-            // Also update GNOME WM button layout live
-            let gsettingsVal = 'appmenu:minimize,maximize,close';
-            if (selectedLayout === 'left') gsettingsVal = 'close,minimize,maximize:';
-            else if (selectedLayout === 'right-compact') gsettingsVal = 'appmenu:close';
-            else if (selectedLayout === 'left-compact') gsettingsVal = 'close:';
-
-            try {
-                const wmSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.wm.preferences' });
-                wmSettings.set_string('button-layout', gsettingsVal);
-            } catch (_) {}
-        });
-        groupGlobalControls.add(globalLayoutCombo);
-
-        const globalControlsCombo = new Adw.ComboRow({
-            title: _('Estilo de botones de cierre y minimizar'),
-            model: controlStyleModel,
-            selected: settings.get_string('window-controls-style') === 'adwaita' ? 1 : 0,
-        });
-        globalControlsCombo.connect('notify::selected', () => {
-            const val = globalControlsCombo.selected === 1 ? 'adwaita' : 'traffic-hover';
-            settings.set_string('window-controls-style', val);
-        });
-        groupGlobalControls.add(globalControlsCombo);
-
-        // =====================================================================
-        // PAGE 4: INTEGRACIONES DEL SISTEMA
-        // =====================================================================
-        const pageIntegrations = new Adw.PreferencesPage({
-            title: _('Integraciones'),
-            icon_name: 'preferences-desktop-display-symbolic',
-            name: 'integrations',
-        });
-        window.add(pageIntegrations);
-
+        // Fondo de pantalla 4K
         const groupWallpaper = new Adw.PreferencesGroup({
-            title: _('Fondo de Pantalla 4K Vectorial'),
-            description: _('Genera automáticamente un wallpaper SVG 4K que combina matemáticamente con la paleta de colores activa.'),
+            title: _('Fondo de Pantalla Coordinado (4K SVG)'),
+            description: _('Genera automáticamente un wallpaper armónico con la paleta de colores activa.'),
         });
-        pageIntegrations.add(groupWallpaper);
+        pageSystem.add(groupWallpaper);
 
         const wpSwitch = new Adw.SwitchRow({
-            title: _('Generar fondo a juego'),
-            subtitle: _('Aplica un fondo de escritorio coordinado al cambiar de tema.'),
+            title: _('Generar fondo de escritorio a juego'),
+            subtitle: _('Aplica un fondo vectorial adaptado a los tonos del tema al cambiar.'),
         });
         settings.bind('apply-wallpaper', wpSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
         groupWallpaper.add(wpSwitch);
 
+        const wpStyleModel = new Gtk.StringList();
+        wpStyleModel.append(_('Olas Abstractas (Waves)'));
+        wpStyleModel.append(_('Aurora Boreal'));
+        wpStyleModel.append(_('Geométrico Cristalino'));
+
+        const wpStyles = ['abstract_waves', 'aurora', 'geometric'];
         let currentWpStyle = settings.get_string('wallpaper-style') || 'abstract_waves';
         let wpGlobalIdx = wpStyles.indexOf(currentWpStyle);
         if (wpGlobalIdx < 0) wpGlobalIdx = 0;
@@ -876,14 +807,15 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
         });
         groupWallpaper.add(globalWpCombo);
 
+        // Ecosistema
         const groupApps = new Adw.PreferencesGroup({
-            title: _('Aplicaciones y Ecosistema'),
+            title: _('Ecosistema y Aplicaciones'),
         });
-        pageIntegrations.add(groupApps);
+        pageSystem.add(groupApps);
 
         const ffSwitch = new Adw.SwitchRow({
             title: _('Sincronizar navegador Firefox'),
-            subtitle: _('Aplica userChrome y userContent a juego en perfiles XDG, Flatpak y Snap.'),
+            subtitle: _('Aplica userChrome y userContent coordinado en perfiles XDG, Flatpak y Snap.'),
         });
         settings.bind('apply-firefox', ffSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
         groupApps.add(ffSwitch);
@@ -897,49 +829,20 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
 
         const notifSwitch = new Adw.SwitchRow({
             title: _('Notificaciones del escritorio'),
-            subtitle: _('Muestra una notificación en GNOME al compilar y aplicar un tema.'),
+            subtitle: _('Muestra una confirmación toast en GNOME al compilar y aplicar un tema.'),
         });
         settings.bind('show-notifications', notifSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
         groupApps.add(notifSwitch);
 
-        // =====================================================================
-        // PAGE 5: ACERCA DE Y DIAGNÓSTICO
-        // =====================================================================
-        const pageAbout = new Adw.PreferencesPage({
-            title: _('Acerca de'),
-            icon_name: 'help-about-symbolic',
-            name: 'about',
+        // Mantenimiento y Restauración
+        const groupMaintenance = new Adw.PreferencesGroup({
+            title: _('Mantenimiento y Fábrica'),
+            description: _('Restaura los valores por defecto del sistema si deseas volver al tema original.'),
         });
-        window.add(pageAbout);
-
-        const groupAboutInfo = new Adw.PreferencesGroup({
-            title: _('GNOME Quick Themer'),
-            description: _('Versión 1.0.0 • Entorno nativo de diseño y personalización para GNOME Shell y Libadwaita.'),
-        });
-        pageAbout.add(groupAboutInfo);
-
-        const githubRow = new Adw.ActionRow({
-            title: _('Repositorio en GitHub'),
-            subtitle: 'https://github.com/angelaguayo/gnome-quick-themer',
-            activatable: true,
-        });
-        githubRow.add_suffix(new Gtk.Image({
-            icon_name: 'external-link-symbolic',
-            valign: Gtk.Align.CENTER,
-        }));
-        githubRow.connect('activated', () => {
-            Gio.AppInfo.launch_default_for_uri('https://github.com/angelaguayo/gnome-quick-themer', null);
-        });
-        groupAboutInfo.add(githubRow);
-
-        const groupReset = new Adw.PreferencesGroup({
-            title: _('Zona de Mantenimiento'),
-            description: _('Restaura los valores predeterminados de fábrica de GNOME sin tocar tus datos personales.'),
-        });
-        pageAbout.add(groupReset);
+        pageSystem.add(groupMaintenance);
 
         const resetAllRow = new Adw.ActionRow({
-            title: _('Restablecer escritorio a Adwaita de fábrica'),
+            title: _('Restablecer escritorio a Adwaita original'),
             subtitle: _('Restaura temas, fuentes, fondos y elimina overrides de Libadwaita y Flatpak'),
         });
         const resetBtn = new Gtk.Button({
@@ -960,6 +863,20 @@ export default class QuickThemerPreferences extends ExtensionPreferences {
             });
         });
         resetAllRow.add_suffix(resetBtn);
-        groupReset.add(resetAllRow);
+        groupMaintenance.add(resetAllRow);
+
+        const githubRow = new Adw.ActionRow({
+            title: _('Repositorio en GitHub'),
+            subtitle: 'https://github.com/angelaguayo/gnome-quick-themer',
+            activatable: true,
+        });
+        githubRow.add_suffix(new Gtk.Image({
+            icon_name: 'external-link-symbolic',
+            valign: Gtk.Align.CENTER,
+        }));
+        githubRow.connect('activated', () => {
+            Gio.AppInfo.launch_default_for_uri('https://github.com/angelaguayo/gnome-quick-themer', null);
+        });
+        groupMaintenance.add(githubRow);
     }
 }
