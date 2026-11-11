@@ -6,8 +6,28 @@
 [![Wayland](https://img.shields.io/badge/Display-Wayland%20%26%20X11-orange?style=flat-square)](https://wayland.freedesktop.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
+<p align="center">
+  <img src="assets/screenshots/hero-banner.png" alt="GNOME Quick Themer Banner" width="100%">
+</p>
+
 > **El entorno de diseño y personalización nativo más rápido, fluido y completo para GNOME Shell y Libadwaita.**  
 > Cambia, diseña y aplica temas con armonía matemática en **1 clic** directamente desde la barra superior (*Quick Settings*), o crea tus propias paletas personalizadas con un **Studio visual 100% nativo en Libadwaita (GTK4)**.
+
+---
+
+## 📸 Capturas de Pantalla
+
+| ⚡ Acceso Rápido (Quick Settings) | 🎨 Studio Libadwaita GTK4 (`prefs.js`) |
+|:---:|:---:|
+| <img src="assets/screenshots/quick-settings.png" alt="Menú Quick Settings" width="100%"> | <img src="assets/screenshots/studio-palette.png" alt="Studio Libadwaita de Paletas" width="100%"> |
+| *Muestras de color en vivo y presets favoritos en 1 clic* | *Selectores de color visuales nativos, bordes y layout de botones* |
+
+<p align="center">
+  <b>💻 CLI Headless de Terminal Ultrarrápido (Zero Pip Deps)</b><br>
+  <img src="assets/screenshots/cli-demo.png" alt="CLI Headless Demo" width="90%">
+  <br>
+  <i>Gestión, compilación y aplicación instantánea de temas con muestras de color ANSI para scripts y dotfiles</i>
+</p>
 
 ---
 

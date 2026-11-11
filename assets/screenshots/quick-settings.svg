@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 560" width="680" height="560">
+  <defs>
+    <filter id="menu-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="18" stdDeviation="28" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background Wallpaper blur simulation -->
+  <rect width="680" height="560" fill="#181825" rx="14" />
+  <circle cx="200" cy="180" r="160" fill="#cba6f7" opacity="0.08" filter="blur(60px)" />
+  <circle cx="500" cy="380" r="180" fill="#7aa2f7" opacity="0.08" filter="blur(60px)" />
+
+  <!-- GNOME Top Bar Mockup -->
+  <rect width="680" height="38" fill="#11111b" opacity="0.95" />
+  <text x="340" y="24" fill="#bac2de" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="13" font-weight="600" text-anchor="middle">mié 11 nov  12:00</text>
+
+  <!-- Top Right Indicators -->
+  <g transform="translate(480, 7)">
+    <rect width="185" height="24" rx="12" fill="#313244" />
+    <text x="14" y="16" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="12">🎨 Catppuccin</text>
+    <circle cx="118" cy="12" r="5" fill="#cba6f7" />
+    <text x="135" y="16" fill="#a6adc8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="12">100%</text>
+  </g>
+
+  <!-- Dropdown Menu Window -->
+  <g transform="translate(190, 52)" filter="url(#menu-shadow)">
+    <!-- Container -->
+    <rect width="360" height="470" rx="20" fill="#1e1e2e" stroke="#313244" stroke-width="1.5" />
+
+    <!-- Submenu Header -->
+    <g transform="translate(20, 20)">
+      <rect width="32" height="32" rx="16" fill="#313244" />
+      <text x="16" y="21" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="14" text-anchor="middle">🎨</text>
+      <text x="44" y="21" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="15" font-weight="700">GNOME Quick Themer</text>
+      
+      <!-- Header Undo Button -->
+      <circle cx="280" cy="16" r="14" fill="#313244" />
+      <text x="280" y="21" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="12" text-anchor="middle">↺</text>
+
+      <!-- Header Settings Button -->
+      <circle cx="312" cy="16" r="14" fill="#313244" />
+      <text x="312" y="21" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="12" text-anchor="middle">⚙</text>
+    </g>
+
+    <!-- Divider -->
+    <line x1="20" y1="70" x2="340" y2="70" stroke="#313244" stroke-width="1" />
+
+    <!-- Preset Items List -->
+    <!-- Item 1: Catppuccin Mocha (Active) -->
+    <g transform="translate(16, 85)">
+      <rect width="328" height="48" rx="12" fill="#313244" />
+      <text x="16" y="29" fill="#cba6f7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="14" font-weight="700">✓ Catppuccin Mocha</text>
+      <!-- Dots -->
+      <circle cx="280" cy="24" r="7" fill="#1e1e2e" stroke="#45475a" stroke-width="1.5" />
+      <circle cx="302" cy="24" r="7" fill="#cba6f7" />
+    </g>
+
+    <!-- Item 2: Everforest Dark -->
+    <g transform="translate(16, 140)">
+      <rect width="328" height="48" rx="12" fill="transparent" />
+      <text x="16" y="29" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="14" font-weight="500">Everforest Dark</text>
+      <!-- Dots -->
+      <circle cx="280" cy="24" r="7" fill="#2d353b" stroke="#475258" stroke-width="1.5" />
+      <circle cx="302" cy="24" r="7" fill="#a7c080" />
+    </g>
+
+    <!-- Item 3: Tokyo Night -->
+    <g transform="translate(16, 195)">
+      <rect width="328" height="48" rx="12" fill="transparent" />
+      <text x="16" y="29" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="14" font-weight="500">Tokyo Night</text>
+      <!-- Dots -->
+      <circle cx="280" cy="24" r="7" fill="#1a1b26" stroke="#292e42" stroke-width="1.5" />
+      <circle cx="302" cy="24" r="7" fill="#7aa2f7" />
+    </g>
+
+    <!-- Item 4: Nord Dark -->
+    <g transform="translate(16, 250)">
+      <rect width="328" height="48" rx="12" fill="transparent" />
+      <text x="16" y="29" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="14" font-weight="500">Nord Dark</text>
+      <!-- Dots -->
+      <circle cx="280" cy="24" r="7" fill="#2e3440" stroke="#434c5e" stroke-width="1.5" />
+      <circle cx="302" cy="24" r="7" fill="#88c0d0" />
+    </g>
+
+    <!-- Item 5: Gruvbox Dark -->
+    <g transform="translate(16, 305)">
+      <rect width="328" height="48" rx="12" fill="transparent" />
+      <text x="16" y="29" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="14" font-weight="500">Gruvbox Dark</text>
+      <!-- Dots -->
+      <circle cx="280" cy="24" r="7" fill="#282828" stroke="#504945" stroke-width="1.5" />
+      <circle cx="302" cy="24" r="7" fill="#fe8019" />
+    </g>
+
+    <!-- Bottom Actions -->
+    <line x1="20" y1="365" x2="340" y2="365" stroke="#313244" stroke-width="1" />
+
+    <g transform="translate(16, 380)">
+      <rect width="328" height="40" rx="10" fill="#313244" opacity="0.6" />
+      <text x="16" y="25" fill="#cdd6f4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="13" font-weight="600">🛠️ Studio de Personalización...</text>
+    </g>
+
+    <g transform="translate(16, 424)">
+      <rect width="328" height="32" rx="8" fill="transparent" />
+      <text x="16" y="21" fill="#a6adc8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif" font-size="12">↺ Restablecer a Adwaita original</text>
+    </g>
+  </g>
+</svg>
