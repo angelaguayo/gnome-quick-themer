@@ -147,7 +147,14 @@ class QuickThemerToggle extends QuickSettings.QuickMenuToggle {
             return candidateHome;
         }
 
-        return '/home/angelaguayo/gnome-quick-themer';
+        // Could not find the project directory — the extension symlink may be absolute.
+        // Fall back to a last-resort check in $HOME and then give up gracefully.
+        const fallback = GLib.build_filenamev([GLib.get_home_dir(), 'gnome-quick-themer']);
+        if (GLib.file_test(GLib.build_filenamev([fallback, 'quick-themer']), GLib.FileTest.EXISTS)) {
+            return fallback;
+        }
+        logError(new Error('[QuickThemer] Project directory not found. Re-install with ./install.sh'));
+        return null;
     }
 
     /**

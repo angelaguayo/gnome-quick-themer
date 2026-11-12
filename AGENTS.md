@@ -133,6 +133,17 @@ python3 -m py_compile quick-themer engine/compiler.py engine/installer.py engine
 ./quick-themer list
 ./quick-themer status
 ./quick-themer info "Catppuccin Mocha"
+./quick-themer info "Tokyo Night"
+
+# Custom preset create / delete lifecycle:
+./quick-themer custom --save --name "Test-Theme" --scheme dark --accent "#ff6600" --bg "#1a1a1a"
+./quick-themer info "Test-Theme"
+./quick-themer delete "Test-Theme"
+```
+
+### Shell Script Syntax Validation:
+```bash
+bash -n install.sh && bash -n uninstall.sh
 ```
 
 ### GSettings Schema Compilation:

@@ -2,6 +2,7 @@
   "name": "GNOME Quick Themer",
   "description": "Selector instantáneo de temas y Studio Libadwaita nativo en Quick Settings para GNOME Shell 45-51+.",
   "uuid": "quick-themer@angelaguayo.github.io",
+  "version": 1,
   "settings-schema": "org.gnome.shell.extensions.quick-themer",
   "shell-version": [
     "45",

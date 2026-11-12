@@ -37,100 +37,162 @@ A diferencia de herramientas que requieren servidores web locales en segundo pla
 
 * 🚀 **100% Nativo de GNOME**: Se integra como un menú toggle en el panel superior (*Quick Settings*, junto a Wi-Fi y Volumen) compatible con **GNOME Shell 45, 46, 47, 48, 49, 50 y 51+**.
 * 🎨 **Muestras de Color en Vivo (Swatches)**: Cada tema muestra en el menú sus tonos reales de ventana y acento antes de aplicarlo.
-* 🛠️ **Libadwaita Studio Integrado (`prefs.js`)**: Ventana de configuración nativa en GTK4 con selector de color interactivo (`Gtk.ColorDialogButton`), sliders de esquinas (`border-radius`), grosor de bordes y selector de disposición de botones (*macOS a la izquierda* o *GNOME a la derecha*).
-* ⚡ **Live Hot-Reload sin Reiniciar Sesión**: Aplica temas en caliente en Wayland mediante pulsos seguros de `dconf` sin parpadeos, sin reiniciar sesión y sin perder ventanas abiertas.
+* 🛠️ **Libadwaita Studio Integrado (`prefs.js`)**: Ventana de configuración nativa en GTK4 con selector de color interactivo, sliders de esquinas (`border-radius`), grosor de bordes y selector de disposición de botones (*macOS a la izquierda* o *GNOME a la derecha*).
+* ⚡ **Live Hot-Reload sin Reiniciar Sesión**: Aplica temas en caliente en Wayland mediante pulsos seguros de `dconf` sin parpadeos ni pérdida de ventanas abiertas.
 * 🖼️ **Fondos de Pantalla 4K Vectoriales Automáticos**: Generador matemático en Python puro que crea y aplica un fondo SVG 4K que combina armónicamente con tu paleta activa.
 * 🦊 **Sincronización Total del Ecosistema**: Propaga el estilo a **GTK 4 (Libadwaita)**, **GTK 3**, **GNOME Shell**, **aplicaciones Flatpak aisladas** y perfiles de **Firefox / LibreWolf / Waterfox** (`userChrome.css`).
-* 💻 **CLI Ultrarrápido Sin Dependencias**: Incluye `./quick-themer` independiente para usuarios de terminal, dotfiles y automatizaciones headless en r/unixporn.
+* 💻 **CLI Ultrarrápido Sin Dependencias**: Incluye `./quick-themer` independiente para usuarios de terminal, dotfiles y automatizaciones headless.
 
 ---
 
-## 📦 Instalación Rápida (1 Clic)
+## 🖥️ Distribuciones Compatibles
 
-### Dependencias Básicas del Sistema
-Solo necesitas `python3` y el compilador SCSS `sassc`:
+GNOME Quick Themer funciona en cualquier distribución Linux con **GNOME Shell 45 o superior**:
+
+| Distribución | Versión mínima | Notas |
+|---|:---:|---|
+| **Fedora** | 39+ | Primera clase — el escritorio GNOME de referencia |
+| **Ubuntu** | 24.04 LTS+ | GNOME 46 incluido por defecto |
+| **Debian** | 13 (Trixie)+ | GNOME 46+ |
+| **Linux Mint (EDGE)** | 22+ | Requiere la variante con GNOME Shell |
+| **Arch Linux** | Rolling | Siempre actualizado |
+| **Manjaro** | Rolling (GNOME edition) | — |
+| **EndeavourOS** | Rolling (GNOME edition) | — |
+| **openSUSE Tumbleweed** | Rolling | — |
+| **openSUSE Leap** | 15.6+ | GNOME 45+ |
+| **Vanilla OS** | 2+ | — |
+| **NixOS** | 24.05+ | Ver nota NixOS más abajo |
+| **Pop!_OS** | 24.04+ | GNOME edition |
+
+> **¿Cómo verifico mi versión de GNOME Shell?**  
+> Ejecuta en la terminal: `gnome-shell --version`
+
+---
+
+## 📋 Requisitos del Sistema
+
+### Obligatorios
+
+| Requisito | Versión mínima | Paquete |
+|---|:---:|---|
+| **GNOME Shell** | 45 | `gnome-shell` |
+| **Python 3** | 3.9 | `python3` |
+| **sassc** (compilador SCSS) | cualquiera | `sassc` |
+| **glib-compile-schemas** | cualquiera | `glib2-devel` / `libglib2.0-dev-bin` |
+
+### Opcionales pero Recomendados
+
+| Requisito | Para qué se usa |
+|---|---|
+| **gnome-shell-extension-user-theme** | Cambio en vivo del tema de GNOME Shell (barra superior, visión general) |
+| **Firefox / LibreWolf / Waterfox** | Sincronización automática de `userChrome.css` |
+| **Flatpak** | Propagación de estilos a apps aisladas en `~/.var/app/` |
+
+### Instalar dependencias obligatorias
 
 ```bash
-# Fedora / RHEL:
-sudo dnf install sassc python3
+# Fedora / RHEL / CentOS Stream:
+sudo dnf install python3 sassc glib2-devel
 
-# Arch Linux / Manjaro:
-sudo pacman -S sassc python
+# Ubuntu / Debian / Pop!_OS / Linux Mint:
+sudo apt install python3 sassc libglib2.0-dev-bin
 
-# Ubuntu / Debian / Pop!_OS:
-sudo apt install sassc python3
+# Arch Linux / Manjaro / EndeavourOS:
+sudo pacman -S python sassc glib2
 
-# openSUSE:
-sudo zypper install sassc python3
+# openSUSE Tumbleweed / Leap:
+sudo zypper install python3 sassc glib2-devel
 ```
 
-> **Recomendado**: Instala la extensión oficial **User Themes** (`gnome-shell-extension-user-theme`) para permitir que GNOME Shell cambie su propia hoja de estilos en tiempo real.
+### Instalar User Themes (recomendado)
 
-### Clonar e Instalar
+```bash
+# Fedora:
+sudo dnf install gnome-shell-extension-user-theme
+
+# Ubuntu / Debian:
+sudo apt install gnome-shell-extensions
+
+# Arch:
+sudo pacman -S gnome-shell-extensions
+
+# O instala directamente desde el navegador:
+# https://extensions.gnome.org/extension/19/user-themes/
+```
+
+> **NixOS**: Añade `pkgs.sassc`, `pkgs.glib` y `pkgs.python3` a tu `environment.systemPackages`. La extensión puede instalarse como symlink desde el store con `home.file`.
+
+---
+
+## 📦 Instalación
+
+### 1. Clona el repositorio
+
 ```bash
 git clone https://github.com/angelaguayo/gnome-quick-themer.git
 cd gnome-quick-themer
+```
+
+### 2. Ejecuta el instalador
+
+```bash
 ./install.sh
 ```
 
-El script verificará las herramientas, compilará los esquemas de GSettings y registrará la extensión en tu entorno GNOME inmediatamente.
+El script verificará automáticamente todas las dependencias, compilará los esquemas de GSettings y registrará la extensión en tu entorno GNOME.
+
+### 3. Reinicia GNOME Shell
+
+> ⚠️ **Este paso es obligatorio** para que GNOME Shell cargue la nueva extensión.
+
+| Sesión | Cómo reiniciar |
+|---|---|
+| **Wayland** (sesión estándar actual) | Cierra sesión (`Ctrl+Alt+Del`) y vuelve a entrar |
+| **X11** (sesión Xorg) | Presiona `Alt+F2`, escribe `r`, pulsa `Enter` |
 
 ---
 
 ## 🕹️ Modos de Uso
 
 ### 1. Desde el Panel Superior (Quick Settings)
+
 Haz clic en el botón de **Temas** en la esquina superior derecha de tu pantalla:
 * **Favoritos de 1 Clic**: Accede al instante a tus 5 paletas favoritas con sus círculos de color.
 * **Catálogo Completo**: Despliega y aplica cualquiera de los 26 presets o tus temas creados.
-* **Botones Rápidos**: Abre el *Studio de Personalización* o *Restablece a Adwaita original* directamente desde la cabecera del menú.
+* **Botones Rápidos**: Abre el *Studio de Personalización* o *Restablece a Adwaita original* directamente desde el menú.
 
 ---
 
 ### 2. Studio de Personalización Nativo (Libadwaita GTK4)
-Abre el Studio desde el menú de la extensión o ejecutando en tu terminal:
+
+Abre el Studio desde el ícono de engranaje del panel, o ejecutando en tu terminal:
 ```bash
 gnome-extensions prefs quick-themer@angelaguayo.github.io
 ```
 
-La ventana de preferencias se organiza en 5 páginas intuitivas:
+La ventana de preferencias se organiza en 3 páginas intuitivas:
 
-#### 🌟 1. Catálogo y Favoritos
+#### 🌟 Catálogo
 * Configura cuáles 5 temas ocupan las posiciones preferentes en el panel superior.
 * Activa el **Modo Compacto** para mantener el menú desplegable ligero.
-* Explora la biblioteca completa: aplica cualquier tema con un clic, ábrelo en el editor o elimina presets personalizados creados por ti.
+* Explora la biblioteca completa: aplica cualquier tema con un clic, ábrelo en el editor o elimina presets personalizados.
 
-#### 🎨 2. Studio de Paleta (Creador y Editor)
-* **Plantilla Base**: Elige cualquier preset existente como punto de partida para clonar o editar.
+#### 🎨 Diseñador (Creador y Editor de Paletas)
+* **Plantilla Base**: Elige cualquier preset existente como punto de partida.
 * **Modo Claro / Oscuro**: Diseña esquemas con variantes `dark` o `light`.
-* **Selectores de Color Intuitivos**:
-  * Haz clic en el botón de color para abrir la **rueda de colores nativa de GNOME** con selector visual, deslizadores RGB/HSV y cuentagotas.
-  * O introduce/pega directamente códigos hexadecimales (`#RRGGBB`).
-  * Personaliza: *Acento principal, texto sobre acento, acento secundario, fondo de ventana, barra lateral (sidebar), barra de título (headerbar), superficie elevada (tarjetas), textos y bordes*.
-* **Geometría de Ventanas y Bordes**:
-  * **Radio de ventana** (0 a 32 px): esquinas cuadradas estilo retro o ultra redondeadas modernas.
-  * **Radio de botones** (0 a 24 px): redondeo de controles interactivos.
-  * **Grosor de borde** (0 a 4 px): desde ventanas sin borde hasta contornos marcados.
-  * **Disposición de botones** (*Derecha GNOME*, *Izquierda macOS*, *Compacto Derecha* o *Compacto Izquierda*).
-  * **Estilo de controles** (*macOS Traffic Lights* con semáforo hover o *Adwaita Estándar* monocromático).
-  * **Estilo de fondo SVG** (*Olas abstractas*, *Aurora boreal* o *Geométrico*).
-* **Guardar Preset**: Guárdalo en tu biblioteca sin necesidad de aplicarlo de inmediato.
-* **Guardar y Aplicar**: Compila en ~300ms y aplícalo a todo tu escritorio en caliente.
+* **Colores esenciales**: Acento, fondo de ventana, sidebar y headerbar visibles de inmediato.
+* **Colores avanzados** (expandibles): Superficie elevada, texto principal, texto secundario y colores de borde.
+* **Geometría de Ventanas**:
+  * **Radio de ventana** (0–32 px): desde esquinas cuadradas hasta ultra redondeadas.
+  * **Radio de botones** (0–24 px): redondeo de controles interactivos.
+  * **Grosor de borde** (0–4 px): desde ventanas sin borde hasta contornos marcados.
+  * **Disposición de botones**: Derecha (GNOME), Izquierda (macOS), Compacto.
+  * **Estilo de controles**: macOS Traffic Lights o Adwaita Estándar.
+  * **Estilo de fondo SVG**: Olas, Aurora boreal o Geométrico.
 
-#### 📐 3. Métricas Globales
-* Ajusta los valores globales de redondeo de ventanas, radio de botones y grosor de bordes.
-* Modifica la disposición de botones de ventana del sistema (`button-layout`) en vivo.
-
-#### 🔗 4. Integraciones del Sistema
-* **Fondo de Pantalla 4K**: Activa la generación matemática del wallpaper coordinado.
-* **Firefox Sync**: Sincroniza automáticamente `userChrome.css` en todos los perfiles de Firefox detectados (nativos XDG, Flatpak y Snap).
-* **Flatpak Propagation**: Enlaza los estilos a las aplicaciones aisladas en `~/.var/app/`.
-* **Notificaciones**: Muestra confirmaciones toast nativas al cambiar de tema.
-
-#### ℹ️ 5. Acerca de y Restauración
-* Información de la versión.
-* Enlace oficial al repositorio.
-* **Botón de Restauración de Fábrica**: Deja tu entorno GNOME exactamente como venía por defecto.
+#### ⚙️ Sistema
+* Wallpaper 4K, sincronización Firefox, propagación Flatpak y notificaciones toast.
+* **Restablecer a Adwaita**: devuelve tu escritorio a los valores de fábrica de GNOME.
 
 ---
 
@@ -200,7 +262,7 @@ Los presets personalizados se almacenan de forma segura en:
 ~/.config/gnome-quick-themer/custom_presets.json
 ```
 
-Puedes guardar este archivo en tus **dotfiles**, sincronizarlo entre tus ordenadores o compartirlo con la comunidad. Cada preset contiene todos los colores HEX y parámetros de ventana de manera independiente.
+Puedes guardar este archivo en tus **dotfiles**, sincronizarlo entre ordenadores o compartirlo con la comunidad. Cada preset contiene todos los colores HEX y parámetros de ventana de manera independiente.
 
 ---
 
@@ -227,6 +289,45 @@ Puedes guardar este archivo en tus **dotfiles**, sincronizarlo entre tus ordenad
 
 ---
 
+## 🔧 Solución de Problemas
+
+### La extensión no aparece en Quick Settings después de instalar
+* Verifica que reiniciaste GNOME Shell (cierra sesión y vuelve a entrar en Wayland).
+* Comprueba que la extensión está habilitada: `gnome-extensions list --enabled`
+* Verifica que tu versión de GNOME Shell es compatible: `gnome-shell --version` (necesita ≥ 45)
+
+### Error: `sassc: command not found`
+Instala `sassc` con tu gestor de paquetes (ver sección [Requisitos](#-requisitos-del-sistema)).
+
+### Error: `glib-compile-schemas: command not found`
+```bash
+# Fedora:  sudo dnf install glib2-devel
+# Ubuntu:  sudo apt install libglib2.0-dev-bin
+# Arch:    sudo pacman -S glib2
+```
+
+### El tema no se aplica a Firefox
+* Verifica que Firefox, LibreWolf o Waterfox está instalado.
+* El script busca perfiles en `~/.mozilla/firefox/`, `~/.config/mozilla/firefox/`, así como variantes Flatpak y Snap.
+* Asegúrate de que la opción **Firefox Sync** está activada en el Studio (página Sistema).
+
+### Los cambios de tema no se ven en aplicaciones Flatpak
+* Activa la opción **Flatpak Propagation** en la página Sistema del Studio.
+* Puede requerir cerrar y reabrir las aplicaciones Flatpak.
+
+### El fondo de pantalla no cambia
+* Verifica que **Fondo de Pantalla 4K** está activado en la página Sistema.
+* Comprueba que `python3` está disponible en el PATH: `python3 --version`
+
+### El Studio de Personalización muestra error de directorio
+Esto ocurre si el instalador se ejecutó con una ruta diferente. Solución:
+```bash
+# Desde el directorio del proyecto clonado:
+./install.sh
+```
+
+---
+
 ## 🗑️ Desinstalación Limpia
 
 Si alguna vez deseas desinstalar la herramienta y devolver tu entorno GNOME a su configuración original:
@@ -235,7 +336,7 @@ Si alguna vez deseas desinstalar la herramienta y devolver tu entorno GNOME a su
 ./uninstall.sh
 ```
 
-El script restaurará el tema GTK de fábrica, fondos del sistema, restablecerá `dconf` y desenlazará la extensión de GNOME Shell.
+El script te preguntará si también deseas eliminar tus presets personalizados (`~/.config/gnome-quick-themer/`), restablecerá el tema GTK de fábrica y desenlazará la extensión de GNOME Shell.
 
 ---
 
