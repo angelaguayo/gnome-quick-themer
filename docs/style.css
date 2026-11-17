@@ -767,6 +767,35 @@ body {
   color: var(--text-primary, #fff);
 }
 
+/* Video Showcase Section */
+.section-video {
+  padding: 3rem 0 4rem;
+}
+
+.video-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--adw-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 0 60px rgba(53, 132, 228, 0.15);
+  background: #000;
+  position: relative;
+  transition: var(--transition);
+}
+
+.video-wrapper:hover {
+  border-color: var(--adw-accent);
+  box-shadow: var(--shadow-lg), 0 0 80px rgba(53, 132, 228, 0.25);
+}
+
+.demo-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+
 /* Features Grid */
 .section-features {
   padding: 5rem 0;

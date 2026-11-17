@@ -4,14 +4,29 @@
 [![GTK4 & Libadwaita](https://img.shields.io/badge/UI-GTK4%20%2F%20Libadwaita-blueviolet?style=flat-square)](https://gnome.pages.gitlab.gnome.org/libadwaita/)
 [![Python 3](https://img.shields.io/badge/Engine-Python%203%20(Zero%20Pip%20Deps)-brightgreen?logo=python&style=flat-square)](https://python.org/)
 [![Wayland](https://img.shields.io/badge/Display-Wayland%20%26%20X11-orange?style=flat-square)](https://wayland.freedesktop.org/)
+[![Sitio Web & Simulador](https://img.shields.io/badge/Sitio%20Web-angelaguayo.github.io-3584e4?style=flat-square&logo=googlechrome&logoColor=white)](https://angelaguayo.github.io/gnome-quick-themer/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 <p align="center">
-  <img src="assets/screenshots/hero-banner.png" alt="GNOME Quick Themer Banner" width="100%">
+  <video src="assets/videos/video.mp4" controls autoplay loop muted playsinline width="100%" poster="assets/screenshots/quick-settings.png">
+    Tu navegador no soporta reproducción de video directa. Puedes <a href="assets/videos/video.mp4">ver o descargar el video demostrativo aquí</a>.
+  </video>
 </p>
 
 > **El entorno de diseño y personalización nativo más rápido, fluido y completo para GNOME Shell y Libadwaita.**  
 > Cambia, diseña y aplica temas con armonía matemática en **1 clic** directamente desde la barra superior (*Quick Settings*), o crea tus propias paletas personalizadas con un **Studio visual 100% nativo en Libadwaita (GTK4)**.
+> 
+> 🌐 **Prueba el simulador interactivo en línea:** [https://angelaguayo.github.io/gnome-quick-themer/](https://angelaguayo.github.io/gnome-quick-themer/)
+
+---
+
+## 🎬 Demostración en Video
+
+https://github.com/angelaguayo/gnome-quick-themer/assets/videos/video.mp4
+
+> *Demostración del cambio instantáneo de paletas desde Quick Settings, personalización en tiempo real mediante Studio Libadwaita y hot-reload sobre Wayland sin parpadeos ni reinicio de sesión.*
+
+---
 
 ---
 
