@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNOME Quick Themer — Personalización Nativa y Rápida para GNOME Shell y Libadwaita</title>
+  <meta name="description" content="El entorno de diseño y personalización nativo más rápido, fluido y completo para GNOME Shell 45–51+ y Libadwaita (GTK4). 1-clic desde Quick Settings, fondos 4K automáticos y sincronización total.">
+  <meta name="keywords" content="gnome, gnome shell, libadwaita, gtk4, theme engine, linux customization, quick settings, userChrome, flatpak themes">
+  <meta property="og:title" content="GNOME Quick Themer — Native Theming for GNOME">
+  <meta property="og:description" content="1-clic preset switching directly from Quick Settings, visual GTK4 Studio, algorithmic 4K wallpapers, and zero pip deps.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-site-scheme="dark">
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand">
+        <span class="brand-icon">🎨</span>
+        <span>GNOME Quick Themer</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#simulator">Simulador</a></li>
+        <li><a href="#features">Características</a></li>
+        <li><a href="#gallery">Capturas</a></li>
+        <li><a href="#presets">Presets (26)</a></li>
+        <li><a href="#install">Instalación</a></li>
+        <li><a href="#compat">Compatibilidad</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button id="toggleSiteScheme" class="btn-icon" title="Cambiar tema claro/oscuro de la página" aria-label="Cambiar tema">☀️</button>
+        <a href="https://github.com/angelaguayo/gnome-quick-themer" class="btn-github" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badges">
+          <span class="badge">GNOME Shell 45 — 51+</span>
+          <span class="badge purple">GTK4 / Libadwaita Nativo</span>
+          <span class="badge green">Wayland & X11 Hot-Reload</span>
+          <span class="badge">Python 3 (Zero Pip Deps)</span>
+        </div>
+
+        <h1 class="hero-title">
+          Personalización instantánea<br>para <span class="accent">GNOME & Libadwaita</span>
+        </h1>
+
+        <p class="hero-desc">
+          Cambia, diseña y aplica temas con armonía matemática en <strong>1 clic</strong> directamente desde <em>Quick Settings</em> en la barra superior. Con Studio visual en Libadwaita, generador de fondos 4K y sincronización con Firefox y Flatpak.
+        </p>
+
+        <!-- 1-Click Fast Install Box -->
+        <div class="install-box-wrapper">
+          <div class="install-box">
+            <code class="install-cmd" id="quickInstallCmd"><span class="prompt">$</span>git clone https://github.com/angelaguayo/gnome-quick-themer.git &amp;&amp; cd gnome-quick-themer &amp;&amp; ./install.sh</code>
+            <button class="btn-copy" data-copy-target="quickInstallCmd">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copiar</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#simulator" class="btn btn-primary">
+            <span>⚡ Probar Simulador en Vivo</span>
+          </a>
+          <a href="#install" class="btn btn-secondary">
+            <span>📖 Guía de Instalación</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Simulator / Playground -->
+    <section class="section-simulator" id="simulator">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Simulador de Tema en Tiempo Real</h2>
+          <p class="section-subtitle">Haz clic en cualquier paleta para ver cómo transforma instantáneamente GNOME Shell, las ventanas de Libadwaita y el fondo vectorial 4K.</p>
+        </div>
+
+        <!-- Preset Chips Carousel -->
+        <div class="preset-selector-strip" id="presetStrip"></div>
+
+        <!-- Desktop Mockup Container -->
+        <div class="desktop-frame">
+          <!-- Dynamic Algorithmic Wallpaper -->
+          <div class="desktop-wallpaper" id="desktopWallpaper"></div>
+
+          <!-- GNOME Top Bar (Panel) -->
+          <div class="gnome-topbar">
+            <div class="topbar-left">
+              <span class="topbar-pill">Actividades</span>
+            </div>
+            <div class="topbar-center">
+              <span>Mar 17 Nov, 12:00</span>
+            </div>
+            <div class="topbar-right">
+              <div class="topbar-quick-pill" title="GNOME Quick Themer Toggle">
+                <span class="topbar-swatch-dot" id="topbarSwatch"></span>
+                <span>🎨 Themer</span>
+              </div>
+              <span class="topbar-pill">📶 🔊 🔋</span>
+            </div>
+          </div>
+
+          <!-- Stage with simulated Libadwaita Studio Window -->
+          <div class="desktop-stage">
+            <div class="adw-window" id="adwWindow">
+              <!-- Window Headerbar -->
+              <div class="adw-headerbar">
+                <div class="window-controls layout-right">
+                  <button class="control-btn control-min" title="Minimizar"></button>
+                  <button class="control-btn control-max" title="Maximizar"></button>
+                  <button class="control-btn control-close" title="Cerrar"></button>
+                </div>
+                <div class="headerbar-title" id="windowThemeTitle">Quick Themer Studio — Tokyo Night</div>
+                <div class="headerbar-actions">
+                  <button class="btn-header">Restaurar</button>
+                  <button class="btn-header" style="background: var(--accent-color, #3584e4); color: var(--accent-fg, #fff);">Aplicar</button>
+                </div>
+              </div>
+
+              <!-- Window Body -->
+              <div class="adw-window-body">
+                <!-- Sidebar -->
+                <div class="adw-sidebar">
+                  <div class="sidebar-item active">🎨 Paleta &amp; Colores</div>
+                  <div class="sidebar-item">📐 Radio &amp; Bordes</div>
+                  <div class="sidebar-item">🖼️ Fondo Algorítmico</div>
+                  <div class="sidebar-item">🦊 Firefox &amp; Flatpak</div>
+                  <div class="sidebar-item">⚙️ Preferencias</div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="adw-content">
+                  <div class="adw-card">
+                    <div class="adw-card-info">
+                      <h4>Sincronización Automática de Ecosistema</h4>
+                      <p>Aplica la paleta a Libadwaita, GTK 3, GNOME Shell y Firefox</p>
+                    </div>
+                    <div class="adw-toggle"><div class="adw-toggle-thumb"></div></div>
+                  </div>
+
+                  <div class="adw-card">
+                    <div class="adw-card-info">
+                      <h4>Valores de Color Activos</h4>
+                      <div class="adw-palette-chips" id="demoColorSwatches"></div>
+                    </div>
+                  </div>
+
+                  <div class="adw-action-row">
+                    <button class="adw-btn adw-btn-accent">Probar en Caliente</button>
+                    <button class="adw-btn adw-btn-secondary">Generar Fondo 4K</button>
+                    <button class="adw-btn adw-btn-secondary">Exportar Preset</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section-features" id="features">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Diseñado con Filosofía GNOME-Native First</h2>
+          <p class="section-subtitle">Sin servidores web locales (Node/Flask), sin bloatware. 100% código nativo para la máxima velocidad y fidelidad visual.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">1 Clic en Quick Settings</h3>
+            <p class="feature-desc">Integración directa en el menú superior de GNOME Shell junto al volumen y Wi-Fi. Muestras de color reales (swatches) para elegir tema de un vistazo.</p>
+          </div>
+
+          <div class="feature-card purple">
+            <div class="feature-icon">🎨</div>
+            <h3 class="feature-title">Studio Libadwaita GTK4</h3>
+            <p class="feature-desc">Ventana de personalización profunda nativa con selectores de color en vivo, radio de esquinas (0 a 32px), grosor de bordes y layout de controles (macOS o GNOME).</p>
+          </div>
+
+          <div class="feature-card green">
+            <div class="feature-icon">🚀</div>
+            <h3 class="feature-title">Live Hot-Reload en Wayland</h3>
+            <p class="feature-desc">Actualización visual instantánea sin cerrar sesión ni reiniciar la Shell. Mediante un pulso en dconf, Mutter recarga los estilos CSS sin perder tus ventanas.</p>
+          </div>
+
+          <div class="feature-card orange">
+            <div class="feature-icon">🖼️</div>
+            <h3 class="feature-title">Fondos 4K Vectoriales</h3>
+            <p class="feature-desc">Generador matemático en Python puro sin dependencias externas. Genera y establece automáticamente un fondo SVG 4K que combina a la perfección con tu paleta.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🦊</div>
+            <h3 class="feature-title">Ecosistema Completo</h3>
+            <p class="feature-desc">Sincroniza tus temas en Libadwaita (GTK4), aplicaciones clásicas GTK3, GNOME Shell, Flatpaks aislados y navegadores Firefox / LibreWolf vía userChrome.css.</p>
+          </div>
+
+          <div class="feature-card purple">
+            <div class="feature-icon">💻</div>
+            <h3 class="feature-title">CLI Headless Independiente</h3>
+            <p class="feature-desc">El binario <code>./quick-themer</code> opera sin interfaz gráfica, perfecto para dotfiles, scripts de inicio, atajos de teclado o servidores con zero dependencias pip.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Screenshots Showcase -->
+    <section class="section-gallery" id="gallery">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Capturas de Pantalla Reales</h2>
+          <p class="section-subtitle">Diseño refinado, coherente y perfectamente integrado con el estándar visual de GNOME.</p>
+        </div>
+
+        <div class="gallery-grid">
+          <div class="gallery-card">
+            <img src="assets/screenshots/quick-settings.png" alt="Menú Quick Settings de GNOME" class="gallery-thumb" loading="lazy">
+            <div class="gallery-info">
+              <h4>Menú Quick Settings</h4>
+              <p>Muestras de color en vivo y presets favoritos en 1 clic</p>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img src="assets/screenshots/studio-palette.png" alt="Studio Libadwaita GTK4" class="gallery-thumb" loading="lazy">
+            <div class="gallery-info">
+              <h4>Studio Libadwaita GTK4</h4>
+              <p>Editor de paleta visual, métricas de esquinas y disposición de botones</p>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <img src="assets/screenshots/cli-demo.png" alt="CLI Headless de Terminal" class="gallery-thumb" loading="lazy">
+            <div class="gallery-info">
+              <h4>CLI Headless de Terminal</h4>
+              <p>Gestión rápida, listado con colores ANSI y compilación para dotfiles</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 26 Presets Showcase Grid -->
+    <section class="section-catalog" id="presets">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Catálogo de 26 Paletas Calibradas</h2>
+          <p class="section-subtitle">Desde clásicos de programación como Catppuccin, Tokyo Night y Nord, hasta estilos vibrantes como Cyberpunk y Rosé Pine.</p>
+        </div>
+
+        <div class="catalog-filters">
+          <div class="catalog-tabs">
+            <button class="catalog-tab active" data-filter="all">Todos (26)</button>
+            <button class="catalog-tab" data-filter="dark">Oscuros</button>
+            <button class="catalog-tab" data-filter="light">Claros</button>
+          </div>
+          <input type="text" id="catalogSearch" class="catalog-search" placeholder="🔍 Buscar paleta...">
+        </div>
+
+        <div class="presets-grid" id="presetsGrid">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation & Distro Tabs -->
+    <section class="section-install" id="install">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Instalación Rápida</h2>
+          <p class="section-subtitle">Instala las dependencias de compilación y ejecuta el instalador en 1 minuto.</p>
+        </div>
+
+        <div class="distro-tabs-wrapper">
+          <div class="distro-tabs-header">
+            <button class="distro-tab active" data-distro="fedora">Fedora / RHEL</button>
+            <button class="distro-tab" data-distro="ubuntu">Ubuntu / Debian / Pop!_OS</button>
+            <button class="distro-tab" data-distro="arch">Arch Linux / Manjaro</button>
+            <button class="distro-tab" data-distro="suse">openSUSE</button>
+          </div>
+
+          <div class="distro-tab-content active" id="distro-fedora">
+            <p><strong>1. Instala las dependencias del sistema:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="sudo dnf install python3 sassc glib2-devel">Copiar</button>
+              <code>sudo dnf install python3 sassc glib2-devel</code>
+            </div>
+
+            <p style="margin-top: 1.5rem;"><strong>2. Clona el repositorio e instala:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="git clone https://github.com/angelaguayo/gnome-quick-themer.git && cd gnome-quick-themer && ./install.sh">Copiar</button>
+              <code>git clone https://github.com/angelaguayo/gnome-quick-themer.git<br>cd gnome-quick-themer<br>./install.sh</code>
+            </div>
+          </div>
+
+          <div class="distro-tab-content" id="distro-ubuntu">
+            <p><strong>1. Instala las dependencias del sistema:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="sudo apt install python3 sassc libglib2.0-dev-bin">Copiar</button>
+              <code>sudo apt install python3 sassc libglib2.0-dev-bin</code>
+            </div>
+
+            <p style="margin-top: 1.5rem;"><strong>2. Clona el repositorio e instala:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="git clone https://github.com/angelaguayo/gnome-quick-themer.git && cd gnome-quick-themer && ./install.sh">Copiar</button>
+              <code>git clone https://github.com/angelaguayo/gnome-quick-themer.git<br>cd gnome-quick-themer<br>./install.sh</code>
+            </div>
+          </div>
+
+          <div class="distro-tab-content" id="distro-arch">
+            <p><strong>1. Instala las dependencias del sistema:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="sudo pacman -S python sassc glib2">Copiar</button>
+              <code>sudo pacman -S python sassc glib2</code>
+            </div>
+
+            <p style="margin-top: 1.5rem;"><strong>2. Clona el repositorio e instala:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="git clone https://github.com/angelaguayo/gnome-quick-themer.git && cd gnome-quick-themer && ./install.sh">Copiar</button>
+              <code>git clone https://github.com/angelaguayo/gnome-quick-themer.git<br>cd gnome-quick-themer<br>./install.sh</code>
+            </div>
+          </div>
+
+          <div class="distro-tab-content" id="distro-suse">
+            <p><strong>1. Instala las dependencias del sistema:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="sudo zypper install python3 sassc glib2-devel">Copiar</button>
+              <code>sudo zypper install python3 sassc glib2-devel</code>
+            </div>
+
+            <p style="margin-top: 1.5rem;"><strong>2. Clona el repositorio e instala:</strong></p>
+            <div class="code-block">
+              <button class="code-copy-btn" data-copy-text="git clone https://github.com/angelaguayo/gnome-quick-themer.git && cd gnome-quick-themer && ./install.sh">Copiar</button>
+              <code>git clone https://github.com/angelaguayo/gnome-quick-themer.git<br>cd gnome-quick-themer<br>./install.sh</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLI Commands Cheat Sheet -->
+        <div style="margin-top: 3rem;">
+          <h3 style="font-size: 1.3rem; margin-bottom: 1rem;">💻 Comandos Rápidos del CLI (Terminal)</h3>
+          <div class="code-block" style="color: #62a0ea;">
+            <p># Listar paletas disponibles</p>
+            <p style="color: #57e389;">./quick-themer list</p><br>
+            <p># Aplicar un tema de inmediato</p>
+            <p style="color: #57e389;">./quick-themer apply "Catppuccin Mocha"</p><br>
+            <p># Ver detalles técnicos de una paleta</p>
+            <p style="color: #57e389;">./quick-themer info "Tokyo Night"</p><br>
+            <p># Crear una paleta personalizada por línea de comandos</p>
+            <p style="color: #57e389;">./quick-themer custom --save --name "MiTema" --scheme dark --accent "#ff6600" --bg "#1a1a1a"</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compatibility Section -->
+    <section class="section-compat" id="compat" style="padding: 5rem 0;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Compatibilidad de Distribuciones</h2>
+          <p class="section-subtitle">Funciona de forma fiable en cualquier sistema Linux con GNOME Shell 45 o superior.</p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="compat-table">
+            <thead>
+              <tr>
+                <th>Distribución</th>
+                <th>Versión Mínima</th>
+                <th>Estado</th>
+                <th>Detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Fedora</strong></td>
+                <td>39+</td>
+                <td><span class="compat-badge">Excelente</span></td>
+                <td>Primera clase — Entorno de referencia de GNOME</td>
+              </tr>
+              <tr>
+                <td><strong>Ubuntu</strong></td>
+                <td>24.04 LTS+</td>
+                <td><span class="compat-badge">Excelente</span></td>
+                <td>Compatible con GNOME 46 y versiones posteriores</td>
+              </tr>
+              <tr>
+                <td><strong>Arch Linux / Manjaro / EndeavourOS</strong></td>
+                <td>Rolling</td>
+                <td><span class="compat-badge">Excelente</span></td>
+                <td>Siempre con la versión más reciente de GNOME</td>
+              </tr>
+              <tr>
+                <td><strong>Debian</strong></td>
+                <td>13 (Trixie)+</td>
+                <td><span class="compat-badge">Compatible</span></td>
+                <td>Requiere GNOME 45 o superior</td>
+              </tr>
+              <tr>
+                <td><strong>openSUSE Tumbleweed / Leap</strong></td>
+                <td>15.6+ / Rolling</td>
+                <td><span class="compat-badge">Compatible</span></td>
+                <td>Totalmente soportado en variantes GNOME</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox Modal for Screenshots -->
+  <div class="modal-overlay" id="galleryModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <img src="" alt="" class="modal-img" id="modalImg">
+      <div class="modal-caption" id="modalCaption"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <ul class="footer-nav">
+        <li><a href="https://github.com/angelaguayo/gnome-quick-themer" target="_blank" rel="noopener noreferrer">Repositorio GitHub</a></li>
+        <li><a href="https://github.com/angelaguayo/gnome-quick-themer/issues" target="_blank" rel="noopener noreferrer">Reportar Problemas</a></li>
+        <li><a href="https://github.com/angelaguayo/gnome-quick-themer/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Licencia MIT</a></li>
+        <li><a href="https://www.gnome.org" target="_blank" rel="noopener noreferrer">GNOME Project</a></li>
+      </ul>
+      <p>GNOME Quick Themer &mdash; Desarrollado con ❤️ para la comunidad GNOME y Linux.</p>
+      <p class="footer-meta">Compatible con GNOME Shell 45–51+ en Wayland y X11.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="presets-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
